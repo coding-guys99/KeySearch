@@ -139,13 +139,14 @@
   "form.requiredhint": "* Kolom wajib diisi",
   
   "tips.title": "Tips Cepat",
-  "tips.identity": "Gunakan [Identitas] untuk memisahkan Perusahaan dan Pribadi.",
-  "tips.type": "Gunakan [Jenis] untuk Proyek / Pengetahuan / Admin / Sumber.",
-  "tips.tags": "Tambahkan [Tag] agar pencarian lebih mudah nanti (mis., “invoice”, “BMD”, “NDI”).",
-  "tips.links": "Tambahkan file/URL di [Tautan] untuk membuka file asli.",
+  "tips.identity": "Gunakan [Identitas] untuk membedakan apakah itu Perusahaan atau Pribadi.",
+"tips.type": "Gunakan [Tipe] untuk menandai apakah itu Proyek, Pengetahuan, Admin, atau Sumber daya.",
+"tips.tags": "Tambahkan [Tag] agar pencarian lebih mudah (misalnya: invoice, design, research).",
+"tips.links": "Letakkan file atau URL di [Tautan] agar bisa dibuka langsung.",
   "new.result": "0 hasil",
   
   "foot.note": "Local-first • IndexedDB • Tidak perlu server"
 }
+
 
 
