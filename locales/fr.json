@@ -97,6 +97,15 @@
 "demo.quickstart.content": "• Ajouter / modifier des cartes dans le panneau de gauche\n• Utilisez des tags (ex. : invoice, design) pour faciliter la recherche\n• Les liens prennent en charge http(s) et les chemins Windows\n• Exporter CSV sur le web → Importer JSON sur le bureau",
 "demo.project.title": "Exemple de projet : Refonte du site web",
 "demo.project.content": "Objectif : Rafraîchir la page hero + tarification\nTâches :\n- Vérifier le texte\n- Nouvelles directions visuelles (Figma)\n- Test A/B des mises en page de prix",
+  "btn.edit": "Modifier",
+"card.openFile": "Ouvrir le fichier",
+"card.openLink": "Ouvrir le lien",
+"identity.company": "Entreprise",
+"identity.personal": "Personnel",
+"type.project": "Projet",
+"type.knowledge": "Connaissance",
+"type.admin": "Admin",
+"type.resource": "Ressource",
 
   "filters.identity": "Identité",
   "filters.all": "Tout",
@@ -137,4 +146,5 @@
   
   "foot.note": "Local-first • IndexedDB • Aucun serveur requis"
 }
+
 
