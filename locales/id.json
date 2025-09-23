@@ -97,6 +97,15 @@
 "demo.quickstart.content": "• Tambah / edit kartu di panel kiri\n• Gunakan tag (misalnya: invoice, design) agar pencarian lebih mudah\n• Link mendukung http(s) dan path Windows\n• Ekspor CSV di web → Impor JSON di desktop",
 "demo.project.title": "Contoh Proyek: Pembaruan Website",
 "demo.project.content": "Tujuan: Segarkan halaman hero + harga\nTugas:\n- Audit teks\n- Arah visual baru (Figma)\n- Uji A/B tata letak harga",
+  "btn.edit": "Edit",
+"card.openFile": "Buka File",
+"card.openLink": "Buka Tautan",
+"identity.company": "Perusahaan",
+"identity.personal": "Pribadi",
+"type.project": "Proyek",
+"type.knowledge": "Pengetahuan",
+"type.admin": "Admin",
+"type.resource": "Sumber daya",
 
 
   "filters.identity": "Identitas",
@@ -138,4 +147,5 @@
   
   "foot.note": "Local-first • IndexedDB • Tidak perlu server"
 }
+
 
