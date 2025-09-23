@@ -6,8 +6,9 @@
 
   const ALIAS = {
     en:'en',
-    zh:'zh-CN', 'zh-cn':'zh-CN', 'zh_cn':'zh-CN', cn:'zh-CN',
-    'zh-tw':'zh-TW','zh_tw':'zh-TW', tw:'zh-TW',
+    zh: 'cn',            // 瀏覽器只有 zh → 預設用簡中檔
+  'zh-cn': 'cn', 'zh_cn': 'cn', cn: 'cn',
+  'zh-tw': 'tw', 'zh_tw': 'tw', tw: 'tw',
     'pt-br':'pt-BR', br:'pt-BR',
     vi:'vi', viet:'vi', ms:'ms', bm:'ms', th:'th', thai:'th',
     hi:'hi', in:'hi', de:'de', fr:'fr', ja:'ja', es:'es', ru:'ru',
@@ -106,3 +107,4 @@
     return I18N.locale;
   })();
 })();
+
