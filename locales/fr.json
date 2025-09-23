@@ -138,13 +138,14 @@
   "form.requiredhint": "* Champs obligatoires",
   
   "tips.title": "Astuces rapides",
-  "tips.identity": "Utilisez [Identité] pour séparer Entreprise et Personnel.",
-  "tips.type": "Utilisez [Type] pour Projet / Connaissance / Admin / Ressource.",
-  "tips.tags": "Ajoutez des [Tags] pour faciliter la recherche (ex. “facture”, “BMD”, “NDI”).",
-  "tips.links": "Ajoutez fichier/URL dans [Liens] pour accéder aux fichiers réels.",
+  "tips.identity": "Utilisez [Identité] pour indiquer s’il s’agit d’Entreprise ou Personnel.",
+"tips.type": "Utilisez [Type] pour marquer s’il s’agit d’un Projet, Connaissance, Admin ou Ressource.",
+"tips.tags": "Ajoutez des [Tags] pour faciliter la recherche (ex. : invoice, design, research).",
+"tips.links": "Mettez des fichiers ou URL dans [Liens] pour les ouvrir directement.",
   "new.result": "0 résultat",
   
   "foot.note": "Local-first • IndexedDB • Aucun serveur requis"
 }
+
 
 
