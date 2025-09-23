@@ -97,6 +97,15 @@
 "demo.quickstart.content": "• Thêm / chỉnh sửa thẻ ở bảng bên trái\n• Dùng thẻ (ví dụ: invoice, design) để tìm kiếm dễ hơn\n• Liên kết hỗ trợ http(s) và đường dẫn Windows\n• Xuất CSV trên web → Nhập JSON trên desktop",
 "demo.project.title": "Ví dụ dự án: Cải tạo website",
 "demo.project.content": "Mục tiêu: Làm mới hero + trang giá\nNhiệm vụ:\n- Kiểm tra nội dung\n- Hướng thiết kế mới (Figma)\n- A/B test bố cục giá",
+  "btn.edit": "Chỉnh sửa",
+"card.openFile": "Mở tệp",
+"card.openLink": "Mở liên kết",
+"identity.company": "Công ty",
+"identity.personal": "Cá nhân",
+"type.project": "Dự án",
+"type.knowledge": "Kiến thức",
+"type.admin": "Quản trị",
+"type.resource": "Tài nguyên",
 
   "filters.identity": "Danh tính",
   "filters.all": "Tất cả",
@@ -137,4 +146,5 @@
   
   "foot.note": "Local-first • IndexedDB • Không cần máy chủ"
 }
+
 
