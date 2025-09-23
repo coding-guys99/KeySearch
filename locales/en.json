@@ -137,14 +137,15 @@
   "form.requiredhint": "* Required fields",
   
   "tips.title": "Quick Tips",
-  "tips.identity": "Use [Identity] to separate Company vs Personal.",
-  "tips.type": "Use [Type] for Project / Knowledge / Admin / Resource.",
-  "tips.tags": "Add [Tags] so search is easier later (e.g., “invoice”, “BMD”, “NDI”).",
-  "tips.links": "Add file/URL in [Links] to jump to real files.",
+  "tips.identity": "Use Identity to tell whether it’s Company or Personal.",
+  "tips.type": "Use Type to mark if it’s a Project, Knowledge, Admin, or Resource.",
+  "tips.tags": "Add Tags to make searching easier (e.g., invoice, design, research).",
+  "tips.links": "Put files or URLs in Links so you can open them directly."
   "new.result": "0 result",
   
   "foot.note": "Local-first • IndexedDB • No server required"
 
 }
+
 
 
