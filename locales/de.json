@@ -93,6 +93,11 @@
   "about.desc": "Leichter Wissensmanager",
   "about.version": "Version",
 
+  "demo.quickstart.title": "👋 Willkommen — Schnellstart",
+"demo.quickstart.content": "• Karten im linken Bereich hinzufügen/bearbeiten\n• Tags verwenden (z. B. invoice, design) für einfachere Suche\n• Links unterstützen http(s) und Windows-Pfade\n• CSV im Web exportieren → JSON auf Desktop importieren",
+"demo.project.title": "Projektbeispiel: Website-Überarbeitung",
+"demo.project.content": "Ziel: Hero- und Preisseite aktualisieren\nAufgaben:\n- Text prüfen\n- Neue visuelle Richtungen (Figma)\n- A/B-Test von Preis-Layouts",
+
   "filters.identity": "Identität",
   "filters.all": "Alle",
   "filters.company": "Firma",
@@ -132,3 +137,4 @@
   
   "foot.note": "Local-first • IndexedDB • Kein Server erforderlich"
 }
+
