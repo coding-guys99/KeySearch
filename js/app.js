@@ -526,17 +526,7 @@ window.KS = {
   const getPath = () => localStorage.getItem('ks.workspace') || 'C:\\KeySearch\\KeySearchData';
   const allowShow = () => DEV_FORCE_SHOW || !localStorage.getItem('ks.dontshow');
 
-  function tryOpen() {
-    if (shown) return true;
-    if (!allowShow()) return false;
-    if (window.Welcome && typeof window.Welcome.open === 'function') {
-      window.Welcome.open(getPath());
-      shown = true;
-      console.log('[KS] Welcome opened');
-      return true;
-    }
-    return false;
-  }
+ 
 
   // 1) 立刻嘗試
   tryOpen();
@@ -590,3 +580,4 @@ window.KS = {
     });
   });
 })();
+
