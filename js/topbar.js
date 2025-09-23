@@ -1,10 +1,10 @@
-// topbar.js 第一行就貼
+// topbar.js (第一行)
 if (document.documentElement.classList.contains('is-web')) {
   console.debug('[KS] topbar.js skipped on web');
-  // 若你 topbar.js 還有搜尋框/其他和網頁版需要的邏輯，就把它們搬到下面 return 之前
-  // 否則直接：
-  // return;
+  // 如果這支檔案沒有網頁版需要的邏輯，就直接：
+  return;
 }
+
 
 
 
@@ -379,3 +379,4 @@ if (act === 'welcome') {
   if (modal) modal.hidden = false;
 
 }
+
