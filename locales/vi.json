@@ -138,13 +138,14 @@
   "form.requiredhint": "* Trường bắt buộc",
   
   "tips.title": "Mẹo nhanh",
-  "tips.identity": "Dùng [Danh tính] để phân biệt Công ty và Cá nhân.",
-  "tips.type": "Dùng [Loại] cho Dự án / Kiến thức / Quản trị / Tài nguyên.",
-  "tips.tags": "Thêm [Thẻ] để tìm kiếm dễ hơn sau này (vd., “hóa đơn”, “BMD”, “NDI”).",
-  "tips.links": "Thêm tệp/URL trong [Liên kết] để mở tệp thật.",
+  "tips.identity": "Dùng [Danh tính] để phân biệt là Công ty hay Cá nhân.",
+"tips.type": "Dùng [Loại] để đánh dấu là Dự án, Kiến thức, Quản trị hoặc Tài nguyên.",
+"tips.tags": "Thêm [Thẻ] để tìm kiếm dễ dàng hơn (ví dụ: invoice, design, research).",
+"tips.links": "Đặt tệp hoặc URL trong [Liên kết] để mở trực tiếp.",
   "new.result": "0 kết quả",
   
   "foot.note": "Local-first • IndexedDB • Không cần máy chủ"
 }
+
 
 
