@@ -93,6 +93,11 @@
   "about.desc": "軽量ナレッジマネージャー",
   "about.version": "バージョン",
 
+  "demo.quickstart.title": "👋 ようこそ — クイックスタート",
+"demo.quickstart.content": "• 左パネルでカードを追加/編集\n• タグ（例: invoice、design）で検索を簡単に\n• リンクは http(s) と Windows パスをサポート\n• WebでCSVをエクスポート → デスクトップでJSONをインポート",
+"demo.project.title": "プロジェクト例：ウェブサイト改修",
+"demo.project.content": "目標：ヒーロー + 料金ページを刷新\nタスク：\n- コピーを監査\n- 新しいビジュアル方向性（Figma）\n- 料金レイアウトのA/Bテスト",
+
   "filters.identity": "識別",
   "filters.all": "すべて",
   "filters.company": "会社",
@@ -132,3 +137,4 @@
   
   "foot.note": "ローカル優先 • IndexedDB • サーバー不要"
 }
+
