@@ -64,7 +64,6 @@ let currentSort = 'updatedAt_desc';
 
 /* ======================= 初始化 ======================= */
 async function init() {
-  await ensureSeed();
   cache = await dbAll();
   bindEvents();
   render();
@@ -520,5 +519,6 @@ if (typeof readPrefs === 'function' && typeof applyPrefs === 'function') {
     }
   });
 }
+
 
 
