@@ -1,10 +1,11 @@
-// topbar.js — 最上面就放
+// topbar.js 第一行就貼
 if (document.documentElement.classList.contains('is-web')) {
-  // 網頁版不綁 Electron 視窗控制與選單
   console.debug('[KS] topbar.js skipped on web');
-  // 可以保留右側搜尋的 DOM 綁定（若你需要），否則直接 return
+  // 若你 topbar.js 還有搜尋框/其他和網頁版需要的邏輯，就把它們搬到下面 return 之前
+  // 否則直接：
   // return;
 }
+
 
 
 
@@ -376,4 +377,5 @@ document.addEventListener('DOMContentLoaded', () => {
 if (act === 'welcome') {
   const modal = document.getElementById('welcome-modal');
   if (modal) modal.hidden = false;
+
 }
