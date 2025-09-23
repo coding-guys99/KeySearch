@@ -1,7 +1,8 @@
+// topbar.js
 (function () {
   if (document.documentElement.classList.contains('is-web')) {
     console.debug('[KS] topbar.js skipped on web');
-    return; // ✅ 放在 IIFE 裡，所以不會再 Illegal return
+    return; // ✅ 合法，因為在 IIFE 內
   }
 
 
@@ -413,3 +414,4 @@ function runAction(act) {
 
 
 })(); 
+
