@@ -97,6 +97,15 @@
 "demo.quickstart.content": "• 在左側面板新增/編輯卡片\n• 使用標籤（如：invoice、design）方便搜尋\n• 連結支援 http(s) 和 Windows 路徑\n• 網頁匯出 CSV → 桌面版匯入 JSON",
 "demo.project.title": "專案範例：網站改版",
 "demo.project.content": "目標：更新主視覺 + 定價頁\n任務：\n- 審核文案\n- 新的視覺方向（Figma）\n- A/B 測試定價版面",
+  "btn.edit": "編輯",
+  "card.openFile": "開啟檔案",
+  "card.openLink": "開啟連結",
+  "identity.company": "公司",
+  "identity.personal": "個人",
+  "type.project": "專案",
+  "type.knowledge": "知識",
+  "type.admin": "行政",
+  "type.resource": "資源",
 
   "filters.identity": "身份",
   "filters.all": "全部",
@@ -137,4 +146,5 @@
   
   "foot.note": "本地優先 • IndexedDB • 不需伺服器"
 }
+
 
