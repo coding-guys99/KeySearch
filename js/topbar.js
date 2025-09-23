@@ -374,9 +374,43 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 })();
 
-if (act === 'welcome') {
-  const modal = document.getElementById('welcome-modal');
-  if (modal) modal.hidden = false;
 
+function runAction(act) {
+  switch (act) {
+    case 'welcome': {
+      const modal = document.getElementById('welcome-modal');
+      if (modal) {
+        modal.hidden = false;
+        document.body.classList.add('ks-modal-open');
+      }
+      return;
+    }
+
+    // ===== File =====
+    case 'new':   return window.KS?.newItem();
+    case 'open':  return window.electronAPI?.chooseFolder?.();
+    case 'export':return window.KS?.exportCSV?.();
+    case 'quit':  return window.electronAPI?.winClose?.();
+
+    // ===== Edit =====
+    case 'prefs': return window.KS?.openPrefs?.();
+
+    // ===== View =====
+    case 'toggle-theme': return window.KS?.toggleTheme?.();
+    case 'zoom-in':      return window.electronAPI?.zoom?.('in');
+    case 'zoom-out':     return window.electronAPI?.zoom?.('out');
+
+    // ===== Data =====
+    case 'import':  return window.KS?.importData?.();
+    case 'reindex': return window.KS?.reindex?.();
+
+    // ===== Help =====
+    case 'docs':  return window.electronAPI?.openExternal?.('https://example.com/keysearch/docs');
+    case 'about': return openAbout();
+
+    default:
+      console.warn('[KS][menu] unknown action:', act);
+  }
 }
+
 
