@@ -113,20 +113,72 @@ function readFilters(){
   };
 }
 
+// === Demo cards (render-only; not stored in DB) ===
+function getDemoCards(){
+  // 只要在這裡維護 i18n key；實際字在 /locales/*.json
+  const t = (k) => (window.i18n?.t(k) || k);
+  const now = new Date().toISOString();
+  return [
+    {
+      id: 'demo-quickstart',
+      _demo: true,
+      title: t('demo.quickstart.title'),
+      identity: 'Company',
+      type: 'Knowledge',
+      tags: ['demo','getting-started'],
+      links: ['https://example.com/keysearch/docs'],
+      content: t('demo.quickstart.content'),
+      createdAt: now,
+      updatedAt: now
+    },
+    {
+      id: 'demo-project',
+      _demo: true,
+      title: t('demo.project.title'),
+      identity: 'Company',
+      type: 'Project',
+      tags: ['demo','web','design'],
+      links: ['https://www.figma.com/','https://trello.com/'],
+      content: t('demo.project.content'),
+      createdAt: now,
+      updatedAt: now
+    }
+  ];
+}
+
+
 function render() {
   const { q, identity, type, tag, sort } = readFilters();
   let items = filterAndSearch(cache, { q, identity, type, tag });
   items = sortItems(items, sort || 'updatedAt_desc');
   currentSort = sort || 'updatedAt_desc';
 
-  if (els.stats) {
-    els.stats.textContent = `${items.length} result${items.length===1?'':'s'}`;
+  // 👉 只有在「資料庫真的為空」時，顯示示例卡
+  const useDemo = (cache.length === 0);
+  if (useDemo) {
+    items = getDemoCards();
   }
+
+  if (els.stats) {
+    // 小提示：讓使用者知道目前看到的是示例
+    const label = useDemo ? `${items.length} examples` : `${items.length} result${items.length===1?'':'s'}`;
+    els.stats.textContent = label;
+  }
+
   if (els.cards) {
     els.cards.innerHTML = items.map(renderCard).join('');
+
+    // 若是示例卡，不綁定「Edit」；避免誤以為能改
     $$('.card').forEach(card => {
+      const isDemo = card.hasAttribute('data-demo');
       const btn = card.querySelector('.edit-btn');
       if (!btn) return;
+      if (isDemo) {
+        btn.disabled = true;
+        btn.title = 'This is an example card';
+        btn.classList.add('is-disabled');
+        return;
+      }
       btn.addEventListener('click', () => {
         const id = card.getAttribute('data-id');
         const it = cache.find(x => x.id === id);
@@ -137,30 +189,36 @@ function render() {
   }
 }
 
+
 function renderCard(it) {
+  // 若未來某些卡沒直接寫 title/content，而是給 key，也能 fallback
+  const tt = (k) => window.i18n?.t(k) || k;
+
+  const isDemo = !!it._demo;
+  const title = it.titleKey ? tt(it.titleKey) : (it.title || '');
+  const content = it.contentKey ? tt(it.contentKey) : (it.content || '');
+
   const tags = (it.tags||[]).map(t=>`<span class="badge">${escapeHtml(t)}</span>`).join('');
   const links = (it.links||[]).map(u=>{
     const label = u.startsWith('file:///') ? 'Open File' : 'Open Link';
     return `<a href="${escapeAttr(u)}" target="_blank" rel="noopener">${label}</a>`;
   }).join('');
-  const snippet = (it.content||'').slice(0,220);
+  const snippet = (content||'').slice(0,220);
   const updated = it.updatedAt ? new Date(it.updatedAt).toLocaleString() : '';
   const identityPill = it.identity==='Company' ? 'blue' : 'lime';
-  const title = it.titleKey ? i18n.t(it.titleKey) : it.title;
-const content = it.contentKey ? i18n.t(it.contentKey) : it.content;
 
   return `
-    <article class="card" data-id="${escapeAttr(it.id)}">
+    <article class="card" data-id="${escapeAttr(it.id)}" ${isDemo?'data-demo="1"':''}>
       <div class="row">
-        <div class="title">${escapeHtml(it.title)}</div>
-        <button class="edit-btn">Edit</button>
+        <div class="title">${escapeHtml(title)}${isDemo?` <span class="badge" style="margin-left:6px;opacity:.7">DEMO</span>`:''}</div>
+        <button class="edit-btn"${isDemo?' disabled':''}>Edit</button>
       </div>
       <div class="badges">
         <span class="badge ${it.identity==='Company'?'green':''}">${escapeHtml(it.identity)}</span>
         <span class="badge">${escapeHtml(it.type)}</span>
         ${tags}
       </div>
-      <div class="snippet">${escapeHtml(snippet)}${(it.content||'').length>220?'…':''}</div>
+      <div class="snippet">${escapeHtml(snippet)}${(content||'').length>220?'…':''}</div>
       <div class="links">${links}</div>
       <div class="meta">
         <span class="pill ${identityPill}">${escapeHtml(it.identity)}</span>
@@ -171,6 +229,7 @@ const content = it.contentKey ? i18n.t(it.contentKey) : it.content;
     </article>
   `;
 }
+
 
 function loadForm(it) {
   if (!it) {
@@ -461,4 +520,5 @@ if (typeof readPrefs === 'function' && typeof applyPrefs === 'function') {
     }
   });
 }
+
 
