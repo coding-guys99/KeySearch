@@ -69,40 +69,4 @@ async function dbExport() {
   return items;
 }
 
-// Seed helper (optional)
-async function ensureSeed() {
-  const list = await dbAll();
-  if (list.length) return; // 已有資料就不塞
-
-  const DEMO_SEED = [
-    {
-      id: 'demo-quickstart',
-      titleKey: 'demo.quickstart.title',
-      contentKey: 'demo.quickstart.content',
-      identity: 'Company',
-      type: 'Knowledge',
-      tags: ['demo'],
-      links: [],
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      _isDemo: true
-    },
-    {
-      id: 'demo-project',
-      titleKey: 'demo.project.title',
-      contentKey: 'demo.project.content',
-      identity: 'Company',
-      type: 'Project',
-      tags: ['demo'],
-      links: [],
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      _isDemo: true
-    }
-  ];
-
-  // 這裡原本寫成 dbImport(seed) → 變數不存在
-  await dbImport(DEMO_SEED);
-}
-
 
