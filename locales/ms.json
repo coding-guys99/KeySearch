@@ -138,13 +138,14 @@
   "form.requiredhint": "* Medan diperlukan",
   
   "tips.title": "Tip Pantas",
-  "tips.identity": "Guna [Identiti] untuk bezakan Syarikat vs Peribadi.",
-  "tips.type": "Guna [Jenis] untuk Projek / Ilmu / Admin / Sumber.",
-  "tips.tags": "Tambah [Tag] supaya carian lebih mudah nanti (cth., “invois”, “BMD”, “NDI”).",
-  "tips.links": "Tambah fail/URL dalam [Pautan] untuk buka fail sebenar.",
+  "tips.identity": "Guna [Identiti] untuk membezakan sama ada ia Syarikat atau Peribadi.",
+"tips.type": "Guna [Jenis] untuk tandakan sama ada ia Projek, Pengetahuan, Admin, atau Sumber.",
+"tips.tags": "Tambah [Tag] supaya carian lebih mudah (cth: invoice, design, research).",
+"tips.links": "Letak fail atau URL dalam [Pautan] supaya boleh dibuka terus."
   "new.result": "0 hasil",
   
   "foot.note": "Local-first • IndexedDB • Tiada server diperlukan"
 }
+
 
 
