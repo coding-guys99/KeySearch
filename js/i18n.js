@@ -1,116 +1,107 @@
-// i18n.js — robust + alias support + data-i18n / attr / html
+// i18n.js — CN/TW 不打架版
 (function () {
-  const cache = new Map();      // e.g. { 'en': {...}, 'zh-TW': {...} }
-  let fallback = null;          // en.json
-  let hasDispatchedReady = false;
+  const cache = new Map();
+  let fallback = null;
+  let readyFired = false;
 
-  // alias → real locale filename base (must match /locales/*.json)
+  // 明確映射（alias → 實檔名）
   const ALIAS = {
-    // you can extend freely
     en: 'en',
-    cn: 'zh-CN',
-    tw: 'zh-TW',
-    br: 'pt-BR',
-    viet: 'vi',
-    bm: 'ms',
-    thai: 'th',
-    in: 'hi',
-    // pass-through short codes
-    de: 'de', fr:'fr', ja:'ja', es:'es', ru:'ru', ar:'ar', hi:'hi',
-    ko:'ko', id:'id', mn:'mn', ms:'ms', vi:'vi', th:'th', pt:'pt'
+    // 中文：只有 zh 或未帶區域 → 視為 zh-CN
+    zh: 'zh-CN',
+    'zh-cn': 'zh-CN', 'zh_cn': 'zh-CN', cn: 'zh-CN',
+    'zh-tw': 'zh-TW', 'zh_tw': 'zh-TW', tw: 'zh-TW',
+    // 其他
+    'pt-br': 'pt-BR', br: 'pt-BR',
+    vi: 'vi', viet: 'vi',
+    ms: 'ms', bm: 'ms',
+    th: 'th', thai: 'th',
+    hi: 'hi', in: 'hi',
+    de: 'de', fr: 'fr', ja: 'ja', es: 'es', ru: 'ru', ar: 'ar',
+    ko: 'ko', id: 'id', mn: 'mn'
   };
 
-  function aliasToReal(raw) {
-    if (!raw) return 'en';
-    const s = String(raw).trim();
-    const key = s.replace(/_/g, '-').toLowerCase();
-    // exact alias first
-    for (const [a, real] of Object.entries(ALIAS)) {
-      if (a === key) return real;
-    }
-    // standard BCP-47 like zh-tw → zh-TW
-    if (/^[a-z]{2}(-[a-z]{2})?$/i.test(key)) {
-      const [lang, region] = key.split('-');
-      return region ? `${lang.toLowerCase()}-${region.toUpperCase()}` : lang.toLowerCase();
+  function aliasToReal(input) {
+    if (!input) return 'en';
+    const k = String(input).trim().replace(/_/g, '-').toLowerCase();
+    if (ALIAS[k]) return ALIAS[k];
+    // 通用 bcp47：xx 或 xx-YY
+    const m = /^([a-z]{2})(?:-([a-z]{2}))?$/.exec(k);
+    if (m) {
+      const lang = m[1], region = m[2];
+      return region ? `${lang}-${region.toUpperCase()}` : lang;
     }
     return 'en';
   }
 
-  async function safeFetchJSON(url) {
-    const r = await fetch(url, { cache: 'no-store' });
-    if (!r.ok) throw new Error(`HTTP ${r.status} for ${url}`);
-    return r.json();
+  async function loadJSON(path) {
+    const res = await fetch(path, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status} ${path}`);
+    return res.json();
   }
 
   const I18N = {
     locale: 'en',
     dict: {},
-    async load(localeOrAlias) {
-      const real = aliasToReal(localeOrAlias);
+    async load(nextLocaleOrAlias) {
+      const real = aliasToReal(nextLocaleOrAlias);
       this.locale = real;
 
-      // ensure fallback en.json
+      // 只用英文作 fallback，避免 CN/TW 互相覆蓋
       if (!fallback) {
-        try {
-          fallback = await safeFetchJSON('./locales/en.json');
-        } catch (err) {
-          console.error('[i18n] Failed to load fallback en.json:', err);
-          fallback = {};
-        }
+        try { fallback = await loadJSON('./locales/en.json'); }
+        catch (e) { console.error('[i18n] load en.json failed', e); fallback = {}; }
       }
 
       if (!cache.has(real)) {
         try {
-          const d = await safeFetchJSON(`./locales/${real}.json`);
-          cache.set(real, d);
-        } catch (err) {
-          console.error(`[i18n] Failed to load ${real}.json:`, err);
+          const dict = await loadJSON(`./locales/${real}.json`);
+          cache.set(real, dict);
+        } catch (e) {
+          console.error(`[i18n] load ${real}.json failed`, e);
           this.locale = 'en';
           cache.set('en', fallback);
         }
       }
 
-      this.dict = cache.get(this.locale) || fallback || {};
+      // 僅套用當前語言；查 key 時若沒有再回退到 en
+      this.dict = cache.get(this.locale) || fallback;
+
       this.apply();
       document.documentElement.setAttribute('lang', this.locale);
 
-      if (!hasDispatchedReady) {
-        hasDispatchedReady = true;
+      // 對外事件
+      if (!readyFired) {
+        readyFired = true;
         window.dispatchEvent(new Event('i18n:ready'));
       }
       window.dispatchEvent(new CustomEvent('ks:i18n-changed', { detail: { locale: this.locale } }));
 
-      // persist preference
+      // 記住偏好
       try {
         const prefs = JSON.parse(localStorage.getItem('ks.prefs') || '{}');
         prefs.lang = this.locale;
         localStorage.setItem('ks.prefs', JSON.stringify(prefs));
       } catch {}
     },
+
     t(key) {
       if (!key) return '';
-      if (this.dict && key in this.dict) return this.dict[key];
-      if (fallback && key in fallback) return fallback[key];
-      return key; // show key when missing
+      if (Object.prototype.hasOwnProperty.call(this.dict, key)) return this.dict[key];
+      if (fallback && Object.prototype.hasOwnProperty.call(fallback, key)) return fallback[key];
+      return key;
     },
+
     apply(root = document) {
-      // [data-i18n] + optional [data-i18n-attr] or [data-i18n-html]
       root.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        const attr = el.getAttribute('data-i18n-attr'); // e.g., placeholder/title
+        const attr = el.getAttribute('data-i18n-attr');
         const asHTML = el.hasAttribute('data-i18n-html');
         const txt = this.t(key);
-
-        if (attr) {
-          el.setAttribute(attr, txt);
-        } else if (asHTML) {
-          el.innerHTML = txt;
-        } else {
-          el.textContent = txt;
-        }
+        if (attr) el.setAttribute(attr, txt);
+        else if (asHTML) el.innerHTML = txt;
+        else el.textContent = txt;
       });
-
-      // shortcut: data-i18n-placeholder
       root.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
         const key = el.getAttribute('data-i18n-placeholder');
         el.setAttribute('placeholder', this.t(key));
@@ -118,16 +109,11 @@
     }
   };
 
-  // expose to window
+  // 全域 API
   window.i18n = I18N;
-
-  // public API: setLang(aliasOrLocale) → Promise
-  window.setLang = async function setLangNext(next) {
-    return I18N.load(next);
-  };
-
-  // ready promise (initial load)
+  window.setLang = (lang) => I18N.load(lang);
   window.i18nReady = (async () => {
+    // 初始化：先用偏好，沒有就用瀏覽器語言（但 zh → zh-CN）
     const prefs = JSON.parse(localStorage.getItem('ks.prefs') || '{}');
     const initial = prefs.lang || navigator.language || 'en';
     await I18N.load(initial);
