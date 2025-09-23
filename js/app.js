@@ -146,6 +146,8 @@ function renderCard(it) {
   const snippet = (it.content||'').slice(0,220);
   const updated = it.updatedAt ? new Date(it.updatedAt).toLocaleString() : '';
   const identityPill = it.identity==='Company' ? 'blue' : 'lime';
+  const title = it.titleKey ? i18n.t(it.titleKey) : it.title;
+const content = it.contentKey ? i18n.t(it.contentKey) : it.content;
 
   return `
     <article class="card" data-id="${escapeAttr(it.id)}">
@@ -459,3 +461,4 @@ if (typeof readPrefs === 'function' && typeof applyPrefs === 'function') {
     }
   });
 }
+
