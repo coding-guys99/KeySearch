@@ -455,72 +455,68 @@
 <script src="./js/welcome.js"></script>
 
 <script>
-(function(){
+(function() {
   /* ===== Export CSV ===== */
-  document.getElementById('btn-export-csv')?.addEventListener('click', () => {
+  const btnCsv = document.getElementById('btn-export-csv');
+  btnCsv?.addEventListener('click', () => {
     if (window.KS?.exportCSV) return window.KS.exportCSV();
     if (typeof window.onExportCSV === 'function') return window.onExportCSV();
     alert('Export CSV function not found.');
   });
 
-  /* ===== Language dropdown (with alias map) ===== */
+  /* ===== Language dropdown (alias map) ===== */
   const sel = document.getElementById('lang-select');
 
-  // 你的下拉值 → i18n 可能使用的實際語言碼
+  // 下拉的值 → 實際語言檔名（請依你的 /locales/ 目錄內實際檔名填）
+  // 你目前的載入錯誤是在抓 ./locales/zh-TW.json，所以先按照「dash 版」命名。
   const LANG_ALIAS = {
-    en: 'en',
-    cn: 'zh_cn',
-    tw: 'zh_tw',
-    bm: 'ms',         // Bahasa Melayu → ms
-    viet: 'vi',       // Vietnam → vi
-    ko: 'ko',
-    id: 'id',
+    en:   'en',
+    cn:   'zh-CN',
+    tw:   'zh-TW',
+    bm:   'ms',
+    viet: 'vi',
+    ko:   'ko',
+    id:   'id',
     thai: 'th',
-    de: 'de',
-    fr: 'fr',
-    ja: 'ja',
-    es: 'es',
-    br: 'pt_br',      // Brazilian Portuguese
-    ru: 'ru',
-    sa: 'ar',         // Arabic
-    in: 'hi',         // Hindi
-    mn: 'mn'
+    de:   'de',
+    fr:   'fr',
+    ja:   'ja',
+    es:   'es',
+    br:   'pt-BR',
+    ru:   'ru',
+    sa:   'ar',
+    in:   'hi',
+    mn:   'mn'
   };
 
-  function getPrefs(){
-    try { return JSON.parse(localStorage.getItem('ks.prefs')||'{}'); }
+  function getPrefs() {
+    try { return JSON.parse(localStorage.getItem('ks.prefs') || '{}'); }
     catch { return {}; }
   }
-  function setPrefs(p){
-    try { localStorage.setItem('ks.prefs', JSON.stringify(p||{})); } catch {}
+  function setPrefs(p) {
+    try { localStorage.setItem('ks.prefs', JSON.stringify(p || {})); } catch {}
   }
 
-  // 讓 setLang 同步/非同步都能運作；如果 i18n 還沒就緒，等 ready 再跑
-  async function safeSetLang(alias){
-    const lang = LANG_ALIAS[alias] || alias;
+  // setLang 同步/非同步都能運作；i18n 尚未就緒則等待
+  async function safeSetLang(alias) {
+    const real = LANG_ALIAS[alias] || alias;
     if (typeof window.setLang !== 'function') {
-      // 等 i18n 模組就緒（如果你在 i18n.js 會 dispatch 事件，可用 'i18n:ready'；沒有就退而求其次等 load）
       const onReady = () => { window.removeEventListener('i18n:ready', onReady); safeSetLang(alias); };
       window.addEventListener('i18n:ready', onReady, { once: true });
-      // 保底：頁面 load 後再試一次
       window.addEventListener('load', () => safeSetLang(alias), { once: true });
       console.warn('[KS] setLang() not ready; queued.');
       return;
     }
     try {
-      const maybe = window.setLang(lang);
+      const maybe = window.setLang(real);   // 這裡假設 i18n.js 會從 ./locales/${real}.json 載
       if (maybe && typeof maybe.then === 'function') await maybe;
 
-      // 成功後：同步 <html lang> 與偏好
-      document.documentElement.setAttribute('lang', lang);
-      const prefs = getPrefs(); prefs.lang = lang; setPrefs(prefs);
+      document.documentElement.setAttribute('lang', real);
+      const prefs = getPrefs(); prefs.lang = real; setPrefs(prefs);
 
-      // 同步下拉顯示（避免外部改語言時不同步）
-      if (sel && sel.value !== alias && [...sel.options].some(o=>o.value===alias)) {
+      if (sel && sel.value !== alias && [...sel.options].some(o => o.value === alias)) {
         sel.value = alias;
       }
-
-      // 如需刷新畫面上的文字，i18n.setLang 通常會處理；保險起見可 rerender
       window.KS?.rerender?.();
     } catch (err) {
       console.error('[KS] setLang failed:', err);
@@ -528,50 +524,39 @@
     }
   }
 
-  function initLangSelect(){
+  // 初始化下拉：從 prefs.lang (實際碼) 或 <html lang> 對回 alias
+  function initLangSelect() {
     if (!sel) return;
     const prefs = getPrefs();
-    // 先從 prefs.lang（實際碼）推回 alias；找不到就用 <html lang> 或 en
     const currentReal = (prefs.lang || document.documentElement.getAttribute('lang') || 'en').toLowerCase();
-    const alias = Object.keys(LANG_ALIAS).find(a => LANG_ALIAS[a] === currentReal) || currentReal;
-    if ([...sel.options].some(o=>o.value===alias)) sel.value = alias;
+    const alias = Object.keys(LANG_ALIAS).find(a => LANG_ALIAS[a].toLowerCase() === currentReal) || currentReal;
+    if ([...sel.options].some(o => o.value === alias)) sel.value = alias;
   }
 
-  sel?.addEventListener('change', () => {
-    const alias = sel.value;
-    safeSetLang(alias);
-  });
+  sel?.addEventListener('change', () => safeSetLang(sel.value));
 
   initLangSelect();
   window.addEventListener('load', initLangSelect);
-})();
 
-/* ===== Preferences 內的語言下拉也接同一套邏輯 ===== */
+  /* ===== Preferences 裡的 #pref-lang 也走同一套 ===== */
   const prefSel = document.getElementById('pref-lang');
-  // 將 pref 的值映射到我們的 alias（與上方 LANG_ALIAS 一致）
-  const REAL_TO_ALIAS = Object.entries(LANG_ALIAS).reduce((acc,[alias,real]) => (acc[real]=alias, acc), {});
-  function initPrefLang(){
+  const REAL_TO_ALIAS = Object.entries(LANG_ALIAS).reduce((acc, [alias, real]) => {
+    acc[real.toLowerCase()] = alias; return acc;
+  }, {});
+  function initPrefLang() {
     if (!prefSel) return;
-    const currentReal = (JSON.parse(localStorage.getItem('ks.prefs')||'{}').lang) 
-                        || document.documentElement.getAttribute('lang') 
-                        || 'en';
+    const currentReal = (getPrefs().lang || document.documentElement.getAttribute('lang') || 'en').toLowerCase();
     const alias = REAL_TO_ALIAS[currentReal] || currentReal;
-    if ([...prefSel.options].some(o=>o.value===alias)) prefSel.value = alias;
+    if ([...prefSel.options].some(o => o.value === alias)) prefSel.value = alias;
   }
-  prefSel?.addEventListener('change', ()=>{
-    const alias = prefSel.value;
-    // 讓偏好面板的下拉也使用同一個切換流程
-    // （會更新 setLang、<html lang>、ks.prefs.lang、同步外面的 #lang-select）
-    safeSetLang(alias);
-  });
+  prefSel?.addEventListener('change', () => safeSetLang(prefSel.value));
+
   initPrefLang();
   window.addEventListener('load', initPrefLang);
 })();
-
 </script>
-
-
-
+	
 
 </body>
+
 </html>
