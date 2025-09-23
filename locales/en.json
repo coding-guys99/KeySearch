@@ -140,12 +140,13 @@
   "tips.identity": "Use Identity to tell whether it’s Company or Personal.",
   "tips.type": "Use Type to mark if it’s a Project, Knowledge, Admin, or Resource.",
   "tips.tags": "Add Tags to make searching easier (e.g., invoice, design, research).",
-  "tips.links": "Put files or URLs in Links so you can open them directly."
+  "tips.links": "Put files or URLs in Links so you can open them directly.",
   "new.result": "0 result",
   
   "foot.note": "Local-first • IndexedDB • No server required"
 
 }
+
 
 
 
