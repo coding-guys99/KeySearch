@@ -190,47 +190,48 @@ function render() {
 
 
 function renderCard(it) {
-  // 若未來某些卡沒直接寫 title/content，而是給 key，也能 fallback
-  const tt = (k) => window.i18n?.t(k) || k;
+  const t = (k) => window.i18n?.t ? window.i18n.t(k) : k;
 
-  const isDemo = !!it._demo;
-  const title = it.titleKey ? tt(it.titleKey) : (it.title || '');
-  const content = it.contentKey ? tt(it.contentKey) : (it.content || '');
+  const tags = (it.tags||[]).map(tag => 
+    `<span class="badge">${escapeHtml(tag)}</span>`).join('');
 
-  const tags = (it.tags||[]).map(t=>`<span class="badge">${escapeHtml(t)}</span>`).join('');
   const links = (it.links||[]).map(u=>{
-  const label = u.startsWith('file:///') 
-    ? window.i18n.t('card.openFile')
-    : window.i18n.t('card.openLink');
-  return `<a href="${escapeAttr(u)}" target="_blank" rel="noopener">${label}</a>`;
-}).join('');
+    const label = u.startsWith('file:///') 
+      ? t('card.openFile') 
+      : t('card.openLink');
+    return `<a href="${escapeAttr(u)}" target="_blank" rel="noopener">${label}</a>`;
+  }).join('');
 
-  const snippet = (content||'').slice(0,220);
+  const snippet = (it.content||'').slice(0,220);
   const updated = it.updatedAt ? new Date(it.updatedAt).toLocaleString() : '';
-  const identityPill = it.identity==='Company' ? 'blue' : 'lime';
+
+  // i18n identity / type
+  const identityLabel = it.identity === 'Company' ? t('identity.company') : t('identity.personal');
+  const typeLabel = t(`type.${it.type.toLowerCase()}`);
 
   return `
-    <article class="card" data-id="${escapeAttr(it.id)}" ${isDemo?'data-demo="1"':''}>
+    <article class="card" data-id="${escapeAttr(it.id)}">
       <div class="row">
-        <div class="title">${escapeHtml(title)}${isDemo?` <span class="badge" style="margin-left:6px;opacity:.7">DEMO</span>`:''}</div>
-        <button class="edit-btn"${isDemo?' disabled':''}>Edit</button>
+        <div class="title">${escapeHtml(it.title)}</div>
+        <button class="edit-btn">${t('btn.edit')}</button>
       </div>
       <div class="badges">
-        <span class="badge ${it.identity==='Company'?'green':''}">${escapeHtml(it.identity)}</span>
-        <span class="badge">${escapeHtml(it.type)}</span>
+        <span class="badge ${it.identity==='Company'?'green':''}">${identityLabel}</span>
+        <span class="badge">${typeLabel}</span>
         ${tags}
       </div>
-      <div class="snippet">${escapeHtml(snippet)}${(content||'').length>220?'…':''}</div>
+      <div class="snippet">${escapeHtml(snippet)}${(it.content||'').length>220?'…':''}</div>
       <div class="links">${links}</div>
       <div class="meta">
-        <span class="pill ${identityPill}">${escapeHtml(it.identity)}</span>
-        <span class="pill">${escapeHtml(it.type)}</span>
+        <span class="pill">${identityLabel}</span>
+        <span class="pill">${typeLabel}</span>
         <span style="margin-left:8px">Updated: ${escapeHtml(updated)}</span>
         ${typeof it._score==='number' ? `<span style="margin-left:auto">Score: ${it._score}</span>` : ''}
       </div>
     </article>
   `;
 }
+
 
 
 function loadForm(it) {
@@ -522,6 +523,7 @@ if (typeof readPrefs === 'function' && typeof applyPrefs === 'function') {
     }
   });
 }
+
 
 
 
