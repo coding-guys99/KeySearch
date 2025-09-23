@@ -138,13 +138,14 @@
   "form.requiredhint": "* Pflichtfelder",
   
   "tips.title": "Schnelle Tipps",
-  "tips.identity": "Verwenden Sie [Identität], um Firma und Persönlich zu trennen.",
-  "tips.type": "Verwenden Sie [Typ] für Projekt / Wissen / Verwaltung / Ressource.",
-  "tips.tags": "Fügen Sie [Tags] hinzu, damit die Suche später einfacher wird (z. B. “Rechnung”, “BMD”, “NDI”).",
-  "tips.links": "Fügen Sie Datei/URL in [Links] hinzu, um echte Dateien zu öffnen.",
+  "tips.identity": "Verwenden Sie [Identität], um anzugeben, ob es Firma oder Persönlich ist.",
+"tips.type": "Verwenden Sie [Typ], um zu kennzeichnen, ob es Projekt, Wissen, Verwaltung oder Ressource ist.",
+"tips.tags": "Fügen Sie [Tags] hinzu, um die Suche zu erleichtern (z. B. invoice, design, research).",
+"tips.links": "Legen Sie Dateien oder URLs in [Links], um sie direkt zu öffnen.",
   "new.result": "0 Ergebnisse",
   
   "foot.note": "Local-first • IndexedDB • Kein Server erforderlich"
 }
+
 
 
