@@ -363,24 +363,57 @@ function csvEscape(value) {
   return s;
 }
 
+// 讓使用者選擇存檔位置（支援 Chrome/Edge），其他瀏覽器走 fallback
+async function saveBlobWithPicker(blob, suggestedName = 'keysearch-export.csv') {
+  if (window.showSaveFilePicker) {
+    // 現代瀏覽器：原生存檔對話框
+    const handle = await window.showSaveFilePicker({
+      suggestedName,
+      types: [{
+        description: 'CSV File',
+        accept: { 'text/csv': ['.csv'] }
+      }]
+    });
+    const writable = await handle.createWritable();
+    await writable.write(blob);
+    await writable.close();
+  } else {
+    // Fallback：用戶輸入檔名 -> 觸發下載
+    let name = prompt('Enter a file name', suggestedName) || suggestedName;
+    if (!/\.csv$/i.test(name)) name += '.csv';
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+}
+
 async function onExportCSV() {
-  // 匯出「當前篩選/搜尋結果」→ 與畫面一致
+  // 1) 取畫面目前的篩選結果，與你原本一樣
   const { q, identity, type, tag, sort } = readFilters();
   let items = filterAndSearch(cache, { q, identity, type, tag });
   items = sortItems(items, sort);
 
-  // 產 CSV 字串；前置 BOM 讓 Excel 在 Windows 上顯示 UTF-8
+  // 2) 轉 CSV（跟你原本一樣）
   const csv = itemsToCSV(items);
   const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `kmdb-export-${Date.now()}.csv`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+
+  // 3) 讓用戶自行命名：預設檔名你可自行定義
+  const base = (q?.trim() ? `keysearch-${q.trim().slice(0,32)}` : 'keysearch-export');
+  const suggested = `${base}.csv`;
+
+  try {
+    await saveBlobWithPicker(blob, suggested);
+  } catch (err) {
+    console.error('[KS] save CSV failed:', err);
+    alert('Save failed: ' + (err?.message || err));
+  }
 }
+
 
 async function onImport(e) {
   const file = e.target.files?.[0];
@@ -590,5 +623,6 @@ window.KS = {
     });
   });
 })();
+
 
 
