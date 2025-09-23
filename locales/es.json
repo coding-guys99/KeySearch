@@ -96,8 +96,16 @@
   "demo.quickstart.title": "👋 Bienvenido — Inicio rápido",
 "demo.quickstart.content": "• Agregar / editar tarjetas en el panel izquierdo\n• Usa etiquetas (ej.: invoice, design) para facilitar la búsqueda\n• Los enlaces admiten http(s) y rutas de Windows\n• Exportar CSV en la web → Importar JSON en el escritorio",
 "demo.project.title": "Ejemplo de proyecto: Renovación del sitio web",
-"demo.project.content": "Meta: Actualizar página hero + precios\nTareas:\n- Revisar copys\n- Nuevas direcciones visuales (Figma)\n- Prueba A/B de diseños de precios"
-,
+"demo.project.content": "Meta: Actualizar página hero + precios\nTareas:\n- Revisar copys\n- Nuevas direcciones visuales (Figma)\n- Prueba A/B de diseños de precios",
+  "btn.edit": "Editar",
+"card.openFile": "Abrir archivo",
+"card.openLink": "Abrir enlace",
+"identity.company": "Empresa",
+"identity.personal": "Personal",
+"type.project": "Proyecto",
+"type.knowledge": "Conocimiento",
+"type.admin": "Admin",
+"type.resource": "Recurso",
 
   "filters.identity": "Identidad",
   "filters.all": "Todo",
@@ -138,4 +146,5 @@
   
   "foot.note": "Local-first • IndexedDB • No requiere servidor"
 }
+
 
