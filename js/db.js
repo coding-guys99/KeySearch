@@ -74,28 +74,34 @@ async function ensureSeed() {
   const list = await dbAll();
   if (list.length) return;
   const now = new Date().toISOString();
-  const seed = [
-    {
-      id: crypto.randomUUID(),
-      title: 'Demo Project',
-      identity: 'Company',
-      type: 'Project',
-      tags: ['demo, example'],
-      links: [],
-      content: 'This is a sample card',
-      createdAt: now, updatedAt: now, _v: 1
-    },
-    {
-      id: crypto.randomUUID(),
-      title: 'My First Project',
-      identity: 'Company',
-      type: 'Project',
-      tags: ['example'],
-      links: [],
-      content: '這是一個示範卡片，你可以點選「編輯」或「刪除」',
-      createdAt: now, updatedAt: now, _v: 1
-    }
-  ];
+  const DEMO_SEED = [
+  {
+    id: 'demo-quickstart',
+    titleKey: 'demo.quickstart.title',
+    contentKey: 'demo.quickstart.content',
+    identity: 'Company',
+    type: 'Knowledge',
+    tags: ['demo'],
+    links: [],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    _isDemo: true
+  },
+  {
+    id: 'demo-project',
+    titleKey: 'demo.project.title',
+    contentKey: 'demo.project.content',
+    identity: 'Company',
+    type: 'Project',
+    tags: ['demo'],
+    links: [],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    _isDemo: true
+  }
+];
+
   await dbImport(seed);
 
 }
+
