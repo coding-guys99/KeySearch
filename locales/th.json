@@ -97,6 +97,15 @@
 "demo.quickstart.content": "• เพิ่ม / แก้ไขการ์ดในแผงด้านซ้าย\n• ใช้แท็ก (เช่น invoice, design) เพื่อการค้นหาง่ายขึ้น\n• ลิงก์รองรับ http(s) และเส้นทาง Windows\n• ส่งออก CSV บนเว็บ → นำเข้า JSON บนเดสก์ท็อป",
 "demo.project.title": "ตัวอย่างโปรเจกต์: ปรับปรุงเว็บไซต์",
 "demo.project.content": "เป้าหมาย: รีเฟรชหน้า hero + หน้า定价\nงาน:\n- ตรวจสอบข้อความ\n- ทิศทางภาพใหม่ (Figma)\n- ทดสอบ A/B การจัดวางราคา",
+  "btn.edit": "แก้ไข",
+"card.openFile": "เปิดไฟล์",
+"card.openLink": "เปิดลิงก์",
+"identity.company": "บริษัท",
+"identity.personal": "ส่วนบุคคล",
+"type.project": "โปรเจกต์",
+"type.knowledge": "ความรู้",
+"type.admin": "ผู้ดูแล",
+"type.resource": "ทรัพยากร",
 
   "filters.identity": "เอกลักษณ์",
   "filters.all": "ทั้งหมด",
@@ -137,4 +146,5 @@
   
   "foot.note": "Local-first • IndexedDB • ไม่ต้องใช้เซิร์ฟเวอร์"
 }
+
 
