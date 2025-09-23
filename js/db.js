@@ -77,34 +77,25 @@ async function ensureSeed() {
   const seed = [
     {
       id: crypto.randomUUID(),
-      title: 'SlowMoJog Test Plan',
+      title: 'Demo Project',
       identity: 'Company',
       type: 'Project',
-      tags: ['replay','BMD','NDI','UI'],
+      tags: ['demo, example'],
       links: [],
-      content: 'Checklist: input sources (NDI/BMD/USB), hotkeys, slow/normal toggle, recording pipeline (WebM -> MP4), error center.',
+      content: 'This is a sample card',
       createdAt: now, updatedAt: now, _v: 1
     },
     {
       id: crypto.randomUUID(),
-      title: 'Template Market – Pricing Ideas',
-      identity: 'Personal',
-      type: 'Project',
-      tags: ['pricing','stripe','marketplace'],
-      links: [],
-      content: 'Tiering: Free, Plus ($9.99), Pro ($19), bundle discounts, designer revenue split.',
-      createdAt: now, updatedAt: now, _v: 1
-    },
-    {
-      id: crypto.randomUUID(),
-      title: 'NDI vs SDI Notes',
+      title: 'My First Project',
       identity: 'Company',
-      type: 'Knowledge',
-      tags: ['NDI','SDI','latency'],
+      type: 'Project',
+      tags: ['example'],
       links: [],
-      content: 'NDI suitable for IP workflows; SDI for low-latency baseband. Consider capture card and signal path.',
+      content: '這是一個示範卡片，你可以點選「編輯」或「刪除」',
       createdAt: now, updatedAt: now, _v: 1
     }
   ];
   await dbImport(seed);
+
 }
