@@ -138,13 +138,14 @@
   "form.requiredhint": "* 必填字段",
   
   "tips.title": "快速提示",
-  "tips.identity": "使用 [身份] 区分公司和个人。",
-  "tips.type": "使用 [类型] 标示 项目 / 知识 / 管理 / 资源。",
-  "tips.tags": "添加 [标签] 方便后续搜索（例如：“发票”、“BMD”、“NDI”）。",
-  "tips.links": "在 [链接] 中添加文件或网址以快速打开实际文件。",
+  "tips.identity": "使用 [身份] 来区分是公司还是个人。",
+"tips.type": "使用 [类型] 来标记是项目、知识、管理或资源。",
+"tips.tags": "添加 [标签] 以方便搜索（例如：invoice、design、research）。",
+"tips.links": "在 [链接] 中放文件或网址，就能直接打开。",
   "new.result": "0 个结果",
   
   "foot.note": "本地优先 • IndexedDB • 无需服务器"
 }
+
 
 
