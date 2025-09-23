@@ -138,13 +138,14 @@
   "form.requiredhint": "* 필수 입력란",
   
   "tips.title": "빠른 팁",
-  "tips.identity": "[신원]을 사용하여 회사와 개인을 구분하세요.",
-  "tips.type": "[유형]을 프로젝트 / 지식 / 관리 / 리소스에 사용하세요.",
-  "tips.tags": "[태그]를 추가하면 나중에 검색이 더 쉬워집니다 (예: “청구서”, “BMD”, “NDI”).",
-  "tips.links": "[링크]에 파일/URL을 추가하여 실제 파일로 이동하세요.",
+  "tips.identity": "[신원]을 사용하여 회사인지 개인인지 구분하세요.",
+"tips.type": "[유형]을 사용하여 프로젝트, 지식, 관리 또는 리소스인지 표시하세요.",
+"tips.tags": "[태그]를 추가하면 검색이 더 쉬워집니다 (예: invoice, design, research).",
+"tips.links": "[링크]에 파일이나 URL을 넣으면 바로 열 수 있습니다.",
   "new.result": "0개 결과",
   
   "foot.note": "Local-first • IndexedDB • 서버 불필요"
 }
+
 
 
