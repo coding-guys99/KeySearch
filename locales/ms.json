@@ -93,6 +93,11 @@
   "about.desc": "Pengurus Pengetahuan Ringan",
   "about.version": "Versi",
 
+  "demo.quickstart.title": "👋 Selamat datang — Mula Pantas",
+"demo.quickstart.content": "• Tambah / edit kad di panel kiri\n• Guna tag (cth: invoice, design) untuk carian lebih mudah\n• Pautan sokong http(s) dan laluan Windows\n• Eksport CSV di web → Import JSON di desktop",
+"demo.project.title": "Contoh Projek: Penambahbaikan Laman Web",
+"demo.project.content": "Matlamat: Segarkan hero + halaman harga\nTugas:\n- Audit salinan\n- Arah visual baharu (Figma)\n- Ujian A/B susun atur harga",
+
   "filters.identity": "Identiti",
   "filters.all": "Semua",
   "filters.company": "Syarikat",
@@ -132,3 +137,4 @@
   
   "foot.note": "Local-first • IndexedDB • Tiada server diperlukan"
 }
+
