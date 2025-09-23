@@ -73,6 +73,16 @@ const els = {
 let cache = [];
 let currentSort = 'updatedAt_desc';
 
+// app.js — web 安全墊片（避免 tryOpen 未定義）
+if (typeof window.tryOpen !== 'function') {
+  window.tryOpen = function () {
+    console.debug('[KS] tryOpen shim (web)'); 
+    return false;
+  };
+}
+
+
+
 // ===== 初始化 =====
 async function init() {
   await ensureSeed();
@@ -580,4 +590,5 @@ window.KS = {
     });
   });
 })();
+
 
