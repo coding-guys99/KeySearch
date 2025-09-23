@@ -97,6 +97,15 @@
 "demo.quickstart.content": "• Adicione / edite cartões no painel esquerdo\n• Use tags (ex.: invoice, design) para facilitar a busca\n• Links suportam http(s) e caminhos do Windows\n• Exporte CSV na web → Importe JSON no desktop",
 "demo.project.title": "Exemplo de Projeto: Reformulação de Site",
 "demo.project.content": "Objetivo: Atualizar página hero + preços\nTarefas:\n- Revisar textos\n- Novas direções visuais (Figma)\n- Teste A/B de layouts de preços",
+  "btn.edit": "Editar",
+"card.openFile": "Abrir Arquivo",
+"card.openLink": "Abrir Link",
+"identity.company": "Empresa",
+"identity.personal": "Pessoal",
+"type.project": "Projeto",
+"type.knowledge": "Conhecimento",
+"type.admin": "Admin",
+"type.resource": "Recurso",
 
 
   "filters.identity": "Identidade",
@@ -138,4 +147,5 @@
   
   "foot.note": "Local-first • IndexedDB • Nenhum servidor necessário"
 }
+
 
