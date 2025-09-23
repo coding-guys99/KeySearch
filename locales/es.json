@@ -93,6 +93,12 @@
   "about.desc": "Gestor de Conocimiento Ligero",
   "about.version": "Versión",
 
+  "demo.quickstart.title": "👋 Bienvenido — Inicio rápido",
+"demo.quickstart.content": "• Agregar / editar tarjetas en el panel izquierdo\n• Usa etiquetas (ej.: invoice, design) para facilitar la búsqueda\n• Los enlaces admiten http(s) y rutas de Windows\n• Exportar CSV en la web → Importar JSON en el escritorio",
+"demo.project.title": "Ejemplo de proyecto: Renovación del sitio web",
+"demo.project.content": "Meta: Actualizar página hero + precios\nTareas:\n- Revisar copys\n- Nuevas direcciones visuales (Figma)\n- Prueba A/B de diseños de precios"
+,
+
   "filters.identity": "Identidad",
   "filters.all": "Todo",
   "filters.company": "Empresa",
@@ -132,3 +138,4 @@
   
   "foot.note": "Local-first • IndexedDB • No requiere servidor"
 }
+
