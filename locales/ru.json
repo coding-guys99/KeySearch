@@ -97,6 +97,15 @@
 "demo.quickstart.content": "• Добавьте / редактируйте карточки в левой панели\n• Используйте теги (например: invoice, design) для удобного поиска\n• Ссылки поддерживают http(s) и пути Windows\n• Экспорт CSV в вебе → Импорт JSON на десктопе",
 "demo.project.title": "Пример проекта: Редизайн сайта",
 "demo.project.content": "Цель: Обновить hero + страницу цен\nЗадачи:\n- Проверка текста\n- Новые визуальные направления (Figma)\n- A/B тест макетов цен",
+  "btn.edit": "Редактировать",
+"card.openFile": "Открыть файл",
+"card.openLink": "Открыть ссылку",
+"identity.company": "Компания",
+"identity.personal": "Личное",
+"type.project": "Проект",
+"type.knowledge": "Знания",
+"type.admin": "Админ",
+"type.resource": "Ресурс",
 
   "filters.identity": "Идентичность",
   "filters.all": "Все",
@@ -137,4 +146,5 @@
   
   "foot.note": "Local-first • IndexedDB • Сервер не требуется"
 }
+
 
