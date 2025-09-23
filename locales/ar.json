@@ -96,6 +96,15 @@
 "demo.quickstart.content": "• أضف / حرر البطاقات في اللوحة اليسرى\n• استخدم الوسوم (مثال: invoice، design) لسهولة البحث\n• الروابط تدعم http(s) ومسارات Windows\n• تصدير CSV على الويب → استيراد JSON على سطح المكتب",
 "demo.project.title": "مثال مشروع: تحديث الموقع",
 "demo.project.content": "الهدف: تحديث صفحة hero + التسعير\nالمهام:\n- تدقيق النصوص\n- اتجاهات بصرية جديدة (Figma)\n- اختبار A/B لتصميمات التسعير",
+  "btn.edit": "تحرير",
+"card.openFile": "فتح ملف",
+"card.openLink": "فتح رابط",
+"identity.company": "شركة",
+"identity.personal": "شخصي",
+"type.project": "مشروع",
+"type.knowledge": "معرفة",
+"type.admin": "إدارة",
+"type.resource": "مورد",
 
   "filters.identity": "الهوية",
   "filters.all": "الكل",
@@ -136,4 +145,5 @@
   
   "foot.note": "Local-first • IndexedDB • لا حاجة للخادم"
 }
+
 
