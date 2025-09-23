@@ -1,11 +1,8 @@
-// topbar.js (第一行)
-if (document.documentElement.classList.contains('is-web')) {
-  console.debug('[KS] topbar.js skipped on web');
-  // 如果這支檔案沒有網頁版需要的邏輯，就直接：
-  return;
-}
-
-
+(function () {
+  if (document.documentElement.classList.contains('is-web')) {
+    console.debug('[KS] topbar.js skipped on web');
+    return; // ✅ 放在 IIFE 裡，所以不會再 Illegal return
+  }
 
 
 
@@ -414,3 +411,5 @@ function runAction(act) {
 }
 
 
+
+})(); 
