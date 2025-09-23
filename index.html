@@ -555,10 +555,25 @@
   window.addEventListener('load', initPrefLang);
 })();
 </script>
-	
+
+<script>
+// i18n fallback：1 秒內 i18n.js 沒定義 setLang，就裝一個最小版避免卡住
+setTimeout(() => {
+  if (typeof window.setLang !== 'function') {
+    window.setLang = async (lang) => {
+      // 最小作法：只先設置 <html lang>，不動文案
+      document.documentElement.setAttribute('lang', lang);
+    };
+    window.dispatchEvent(new Event('i18n:ready'));
+    console.warn('[KS] i18n fallback setLang installed.');
+  }
+}, 1000);
+</script>
+
 
 </body>
 
 </html>
+
 
 
