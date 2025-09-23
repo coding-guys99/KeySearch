@@ -97,6 +97,15 @@
 "demo.quickstart.content": "• Karten im linken Bereich hinzufügen/bearbeiten\n• Tags verwenden (z. B. invoice, design) für einfachere Suche\n• Links unterstützen http(s) und Windows-Pfade\n• CSV im Web exportieren → JSON auf Desktop importieren",
 "demo.project.title": "Projektbeispiel: Website-Überarbeitung",
 "demo.project.content": "Ziel: Hero- und Preisseite aktualisieren\nAufgaben:\n- Text prüfen\n- Neue visuelle Richtungen (Figma)\n- A/B-Test von Preis-Layouts",
+  "btn.edit": "Bearbeiten",
+"card.openFile": "Datei öffnen",
+"card.openLink": "Link öffnen",
+"identity.company": "Firma",
+"identity.personal": "Persönlich",
+"type.project": "Projekt",
+"type.knowledge": "Wissen",
+"type.admin": "Verwaltung",
+"type.resource": "Ressource",
 
   "filters.identity": "Identität",
   "filters.all": "Alle",
@@ -137,4 +146,5 @@
   
   "foot.note": "Local-first • IndexedDB • Kein Server erforderlich"
 }
+
 
