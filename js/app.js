@@ -199,9 +199,12 @@ function renderCard(it) {
 
   const tags = (it.tags||[]).map(t=>`<span class="badge">${escapeHtml(t)}</span>`).join('');
   const links = (it.links||[]).map(u=>{
-    const label = u.startsWith('file:///') ? 'Open File' : 'Open Link';
-    return `<a href="${escapeAttr(u)}" target="_blank" rel="noopener">${label}</a>`;
-  }).join('');
+  const label = u.startsWith('file:///') 
+    ? window.i18n.t('card.openFile')
+    : window.i18n.t('card.openLink');
+  return `<a href="${escapeAttr(u)}" target="_blank" rel="noopener">${label}</a>`;
+}).join('');
+
   const snippet = (content||'').slice(0,220);
   const updated = it.updatedAt ? new Date(it.updatedAt).toLocaleString() : '';
   const identityPill = it.identity==='Company' ? 'blue' : 'lime';
@@ -519,6 +522,7 @@ if (typeof readPrefs === 'function' && typeof applyPrefs === 'function') {
     }
   });
 }
+
 
 
 
