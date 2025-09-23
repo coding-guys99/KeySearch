@@ -139,13 +139,14 @@
   "form.requiredhint": "* Campos obrigatórios",
   
   "tips.title": "Dicas rápidas",
-  "tips.identity": "Use [Identidade] para separar Empresa e Pessoal.",
-  "tips.type": "Use [Tipo] para Projeto / Conhecimento / Admin / Recurso.",
-  "tips.tags": "Adicione [Tags] para facilitar a busca depois (ex., “fatura”, “BMD”, “NDI”).",
-  "tips.links": "Adicione arquivo/URL em [Links] para abrir arquivos reais.",
+  "tips.identity": "Use [Identidade] para indicar se é Empresa ou Pessoal.",
+"tips.type": "Use [Tipo] para marcar se é Projeto, Conhecimento, Admin ou Recurso.",
+"tips.tags": "Adicione [Tags] para facilitar a busca (ex.: invoice, design, research).",
+"tips.links": "Coloque arquivos ou URLs em [Links] para abri-los diretamente.",
   "new.result": "0 resultado",
   
   "foot.note": "Local-first • IndexedDB • Nenhum servidor necessário"
 }
+
 
 
