@@ -93,6 +93,11 @@
   "about.desc": "가벼운 지식 관리자",
   "about.version": "버전",
 
+  "demo.quickstart.title": "👋 환영합니다 — 빠른 시작",
+"demo.quickstart.content": "• 왼쪽 패널에서 카드 추가/편집\n• 태그 사용 (예: invoice, design) → 검색 용이\n• 링크는 http(s) 및 Windows 경로 지원\n• 웹에서 CSV 내보내기 → 데스크톱에서 JSON 가져오기",
+"demo.project.title": "프로젝트 예시: 웹사이트 리뉴얼",
+"demo.project.content": "목표: 메인 비주얼 + 가격 페이지 새로고침\n작업:\n- 카피 검토\n- 새로운 비주얼 방향(Figma)\n- 가격 레이아웃 A/B 테스트",
+
   "filters.identity": "신원",
   "filters.all": "전체",
   "filters.company": "회사",
@@ -132,3 +137,4 @@
   
   "foot.note": "Local-first • IndexedDB • 서버 불필요"
 }
+
