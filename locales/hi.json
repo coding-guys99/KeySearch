@@ -97,6 +97,15 @@
 "demo.quickstart.content": "• बाएँ पैनल में कार्ड जोड़ें / संपादित करें\n• आसान खोज के लिए टैग का उपयोग करें (जैसे: invoice, design)\n• लिंक http(s) और Windows पथ का समर्थन करते हैं\n• वेब पर CSV निर्यात करें → डेस्कटॉप पर JSON आयात करें",
 "demo.project.title": "प्रोजेक्ट उदाहरण: वेबसाइट रिवैम्प",
 "demo.project.content": "लक्ष्य: हीरो + प्राइसिंग पेज को नया करना\nकार्य:\n- कॉपी ऑडिट करें\n- नए दृश्य दिशा-निर्देश (Figma)\n- प्राइसिंग लेआउट का A/B परीक्षण",
+  "btn.edit": "संपादित करें",
+"card.openFile": "फ़ाइल खोलें",
+"card.openLink": "लिंक खोलें",
+"identity.company": "कंपनी",
+"identity.personal": "व्यक्तिगत",
+"type.project": "प्रोजेक्ट",
+"type.knowledge": "ज्ञान",
+"type.admin": "प्रशासन",
+"type.resource": "संसाधन",
 
   "filters.identity": "पहचान",
   "filters.all": "सभी",
@@ -137,4 +146,5 @@
   
   "foot.note": "Local-first • IndexedDB • सर्वर की आवश्यकता नहीं"
 }
+
 
