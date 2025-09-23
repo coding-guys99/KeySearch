@@ -98,6 +98,15 @@
 "demo.quickstart.content": "• Зүүн талын самбарт карт нэмэх/засах\n• Хайлт хялбар болгохын тулд шошго ашигла (ж.: invoice, design)\n• Холбоос нь http(s) болон Windows замыг дэмжинэ\n• Вэб дээр CSV экспорт → Десктоп дээр JSON импорт",
 "demo.project.title": "Төслийн жишээ: Вэбсайт шинэчлэлт",
 "demo.project.content": "Зорилго: Херогийн + үнэ хуудас шинэчлэх\nДаалгавар:\n- Копи хяналт\n- Шинэ визуал чиглэл (Figma)\n- Үнэ зохиомжийн A/B тест",
+  "btn.edit": "Засах",
+"card.openFile": "Файл нээх",
+"card.openLink": "Холбоос нээх",
+"identity.company": "Компани",
+"identity.personal": "Хувийн",
+"type.project": "Төсөл",
+"type.knowledge": "Мэдлэг",
+"type.admin": "Админ",
+"type.resource": "Нөөц",
 
   "filters.identity": "Иденти",
   "filters.all": "Бүгд",
@@ -138,4 +147,5 @@
   
   "foot.note": "Local-first • IndexedDB • Сервер шаардлагагүй"
 }
+
 
