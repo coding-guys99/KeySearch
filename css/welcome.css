@@ -1,0 +1,85 @@
+.welcome-modal {
+  position: fixed;
+  inset: 0;
+  background:var(--ks-bg-elev) ;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.welcome-content {
+  position: relative;
+  z-index: 1;
+  background: var(--ks-bg-elev);
+  color: var(--ks-fg);
+  padding: 40px 44px;
+  border-radius: 16px;
+  width: 640px;
+  max-width: 92vw;
+  box-shadow: 0 28px 72px rgba(0,0,0,.55);
+  text-align: center;
+}
+
+.welcome-content h2 {
+  margin: 0 0 12px;
+  font-size: 24px;
+}
+
+.welcome-content p {
+  margin: 0 0 6px;
+  font-size: 15px;
+  color: var(--ks-fg);
+}
+
+.welcome-logo {
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #D4AF37, #8f7a2a);
+  color: var(--ks-fg);
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-inline: auto;
+}
+
+.welcome-actions {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.welcome-actions button {
+  padding: 12px 18px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  background:var(--ks-bg-elev) ;
+  color: var(--ks-fg);
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.welcome-actions button:hover {
+  background:var(--ks-bg-elev) ;
+  border-color: #666;
+}
+
+#welcome-start {
+  background:var(--ks-bg-elev) ;
+  color: var(--ks-fg);
+  font-weight: 700;
+  border: none;
+}
+
+#welcome-start:hover {
+  background: var(--ks-bg-elev);
+}
+
+/* 強制 hidden 真的隱藏（有些 reset 會把 UA 規則洗掉） */
+.welcome-modal[hidden] { display: none !important; }

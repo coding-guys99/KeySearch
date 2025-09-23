@@ -1,0 +1,255 @@
+:root{
+  --ks-bg:#0A0A0A; --ks-bg-elev:#151515; --ks-fg:#FFFFFF; --ks-fg-dim:#B9C0CC;
+  --ks-gold:#D4AF37; --ks-blue:#2C6EFA; --ks-sep:#2a2a2a; --ks-chip-bg:#111214;
+  --ks-h:52px;
+}
+.ks-theme-light{
+  --ks-bg:#F6F7F9; --ks-bg-elev:#FFFFFF; --ks-fg:#111; --ks-fg-dim:#3C4451;
+  --ks-sep:#E3E6EB; --ks-chip-bg:#F0F2F5;
+}
+
+/* ============ 頂部欄 (Header) ============ */
+.ks-topbar{
+  height:var(--ks-h); background:var(--ks-bg); color:var(--ks-fg);
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:0 10px; border-bottom:1px solid var(--ks-sep);
+  position:sticky; top:0; z-index:999;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans", Arial;
+}
+.ks-topbar *{ box-sizing:border-box; }
+
+.ks-left{ display:flex; align-items:center; gap:10px; min-width:0; }
+.ks-brand{ display:flex; align-items:center; gap:8px; }
+.ks-logo{
+  width:28px; height:28px; border-radius:8px; display:grid; place-items:center;
+  background:linear-gradient(135deg,var(--ks-gold),#8f7a2a); color:#0b0b0b; font-weight:800;
+}
+.ks-appname{ font-weight:700; letter-spacing:.3px; }
+
+.ks-chip{
+  display:flex; align-items:center; gap:6px; max-width:380px; padding:6px 10px;
+  border-radius:999px; border:1px solid var(--ks-sep); background:var(--ks-chip-bg);
+  color:var(--ks-fg); cursor:pointer;
+}
+.ks-chip:hover{ border-color:var(--ks-gold); }
+.ks-chip-text{ overflow:hidden; white-space:nowrap; text-overflow:ellipsis; max-width:300px; }
+
+/* ============ 主選單 ============ */
+.ks-mainmenus{ display:flex; align-items:center; gap:6px; position:relative; }
+.ks-menubtn{
+  padding:6px 12px; border-radius:8px; border:1px solid transparent;
+  background:transparent; color:var(--ks-fg); cursor:pointer; font-weight:600;
+}
+.ks-menubtn:hover{ background:var(--ks-bg-elev); border-color:var(--ks-sep); }
+.ks-menubtn[aria-expanded="true"]{
+  color:var(--ks-gold); border-color:var(--ks-gold); background:rgba(212,175,55,.1);
+}
+
+/* ============ Dropdown Menu ============ */
+.ks-menu{
+  position:fixed; left:0; top:0;
+  min-width:200px; max-height:calc(100vh - 20px); overflow:auto;
+  padding:6px; border-radius:8px;
+  border:1px solid var(--ks-sep); background:var(--ks-bg-elev);
+  box-shadow:0 8px 24px rgba(0,0,0,.35); z-index:1000;
+}
+.ks-menu[hidden]{ display:none !important; }
+.ks-menu button{
+  width:100%; text-align:left; padding:8px 12px;
+  border-radius:6px; border:0; background:transparent; color:var(--ks-fg); cursor:pointer;
+}
+.ks-menu button:hover{ background:rgba(255,255,255,.08); }
+.ks-menu hr{ border:none; border-top:1px solid var(--ks-sep); margin:6px 0; }
+.ks-menu-title{ font-size:12px; color:var(--ks-fg-dim); margin:4px 8px; }
+.ks-menu-list{ max-height:280px; overflow:auto; }
+
+/* ============ 右側區塊 ============ */
+.ks-right{ display:flex; align-items:center; gap:8px; }
+.ks-searchwrap{ width:340px; }
+.ks-searchwrap input{
+  width:100%; height:34px; padding:0 12px; border-radius:999px;
+  border:1px solid var(--ks-sep); background:var(--ks-bg-elev); color:var(--ks-fg);
+}
+.ks-searchwrap input:focus{
+  outline:none; border-color:var(--ks-blue);
+  box-shadow:0 0 0 3px rgba(44,110,250,.2);
+}
+.ks-iconbtn{
+  position:relative; padding:6px 10px; border-radius:8px; border:1px solid var(--ks-sep);
+  background:var(--ks-bg-elev); color:var(--ks-fg); cursor:pointer;
+}
+.ks-iconbtn:hover{ border-color:var(--ks-gold); }
+.ks-badge{
+  position:absolute; top:-4px; right:-2px; min-width:16px; height:16px; border-radius:999px;
+  background:#ff3b30; color:#fff; font-size:11px; display:grid; place-items:center; padding:0 4px;
+}
+.ks-winbtns{ display:flex; align-items:center; gap:4px; margin-left:2px; }
+.ks-winbtns button{
+  width:34px; height:30px; border-radius:8px; border:1px solid var(--ks-sep);
+  background:var(--ks-bg-elev); color:var(--ks-fg); cursor:pointer;
+}
+.ks-winbtns button:hover{ background:rgba(255,255,255,.06); }
+#ks-close:hover{ background:rgba(255,59,48,.15); border-color:#ff3b30; }
+#ks-max:hover{ background:rgba(142,142,142,.15); border-color:#4C4C4C; }
+#ks-min:hover{ background:rgba(142,142,142,.15); border-color:#4C4C4C; }
+
+/* RWD */
+@media (max-width:1024px){
+  .ks-chip-text{ max-width:180px; }
+  .ks-searchwrap{ width:250px; }
+}
+@media (max-width:780px){
+  .ks-chip{ display:none; }
+  .ks-mainmenus{ display:none; }
+  .ks-searchwrap{ width:200px; }
+}
+
+/* ============ Preferences Modal ============ */
+.ks-modal[hidden]{ display:none !important; }
+.ks-modal{
+  position:fixed; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(0,0,0,.55); z-index:2000;
+}
+.ks-modal-content{
+  width:720px; max-width:92vw; background:var(--ks-bg); color:var(--ks-fg);
+  border:1px solid var(--ks-sep); border-radius:12px; padding:14px 16px 12px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+}
+.ks-modal-header{
+  display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;
+}
+.ks-modal-header h2{ font-size:18px; margin:0; }
+.ks-prefs{ display:flex; gap:16px; }
+.ks-prefs-tabs{
+  width:180px; flex:0 0 180px; display:flex; flex-direction:column; gap:6px;
+  border-right:1px solid var(--ks-sep); padding-right:10px;
+}
+.ks-tab{
+  text-align:left; padding:8px 10px; border-radius:8px; border:1px solid transparent;
+  background:transparent; color:var(--ks-fg); cursor:pointer; font-weight:600;
+}
+.ks-tab:hover{ background:var(--ks-bg-elev); border-color:var(--ks-sep); }
+.ks-tab.is-active{
+  background:rgba(212,175,55,.12); border-color:var(--ks-gold); color:var(--ks-gold);
+}
+.ks-prefs-panels{ flex:1; min-width:0; }
+.ks-panel .row{
+  display:flex; align-items:center; gap:10px; margin:10px 0;
+}
+.ks-panel .row > span{ width:220px; color:var(--ks-fg-dim); }
+.ks-panel input[type="text"],
+.ks-panel input[type="number"],
+.ks-panel select{
+  flex:1; min-width:0; height:32px; padding:0 10px; border-radius:8px;
+  border:1px solid var(--ks-sep); background:var(--ks-bg-elev); color:var(--ks-fg);
+}
+.ks-panel input[type="checkbox"]{ width:18px; height:18px; }
+.ks-panel .hint{ color:var(--ks-fg-dim); margin:8px 0; }
+.ks-panel .keys{ margin:6px 0 0 0; padding-left:18px; }
+.ks-panel .keys kbd{
+  background:var(--ks-bg-elev); border:1px solid var(--ks-sep); border-radius:6px;
+  padding:2px 6px; margin:0 2px; font-size:12px;
+}
+.ks-modal-actions{ margin-top:14px; display:flex; justify-content:flex-end; gap:8px; }
+.ks-modal-actions button{
+  padding:8px 12px; border-radius:8px; border:1px solid var(--ks-sep);
+  background:var(--ks-bg-elev); color:var(--ks-fg); cursor:pointer;
+}
+.ks-modal-actions button.primary{
+  border-color:var(--ks-gold); background:rgba(212,175,55,.15); color:var(--ks-fg);
+}
+
+/* 保證 hidden 一定隱藏（避免 reset 影響） */
+.ks-menu[hidden] { display: none !important; }
+
+/* 菜單本體（若你已定義可略過） */
+.ks-menu{
+  position: fixed;          /* 由 JS 定位 */
+  min-width: 220px;
+  padding: 6px;
+  border-radius: 10px;
+  border: 1px solid var(--ks-sep, #2a2a2a);
+  background: var(--ks-bg-elev, #151515);
+  color: var(--ks-fg, #fff);
+  box-shadow: 0 8px 24px rgba(0,0,0,.35);
+
+  z-index: 1000;
+}
+
+/* 防止按鈕默認是 submit 影響（若在 form 內） */
+.ks-menubtn, .ks-menu button { 
+  /* 在 HTML 上已建議加 type="button"，這裡再雙保險 */
+}
+
+/* 保證 hidden 一定隱藏（有些 reset 會覆蓋 UA 規則） */
+.ks-menu[hidden] { display: none !important; }
+
+/* 確保選單層可點擊、不被遮罩吃掉事件 */
+.ks-menu { pointer-events: auto; }
+
+/* hidden 一定要隱藏（避免 reset 覆蓋 UA 規則） */
+.ks-modal[hidden] { display: none !important; }
+
+/* 開啟對話框時，禁止背景滾動 */
+body.ks-modal-open { overflow: hidden; }
+
+/* 確保 hidden 真的隱藏（避免 reset 覆蓋 UA 規則） */
+.ks-modal[hidden] { display: none !important; }
+
+/* 防止有 ::before 或外層把點擊吃掉 */
+.ks-modal, .ks-modal * { pointer-events: auto; }
+
+/* 頂欄整條可拖曳 */
+.ks-topbar { -webkit-app-region: drag; }
+
+/* 但所有可互動的東西都要排除拖曳，才能點擊 */
+.ks-iconbtn,
+.ks-searchwrap input,
+.ks-chip,
+.ks-menubtn,
+.ks-menu,
+.ks-winbtns button {
+  -webkit-app-region: no-drag;
+}
+
+/* 保險：選單本體一定吃得到點擊 */
+.ks-menu { pointer-events: auto; }
+
+/* hidden 保證隱藏 */
+.ks-menu[hidden], .ks-modal[hidden] { display: none !important; }
+
+/* 確保變數切換能覆蓋到整個應用 */
+body.ks-theme-light, #ks-topbar.ks-theme-light { /* 這個選擇器只是確保作用域涵蓋 */
+  /* 你之前定義的 --ks-* 變數已在 .ks-theme-light 裡，這裡只確保 class 生效 */
+}
+
+/* 如你使用 reset.css 可能會把 [hidden] 規則洗掉，補一條 */
+[hidden] { display: none !important; }
+
+/* Preferences Modal 必須可點擊，並從拖曳區域排除 */
+.ks-modal,
+.ks-modal * {
+  -webkit-app-region: no-drag;   /* ← 這行最關鍵：避免 frameless 拖曳吃掉點擊 */
+}
+
+.ks-modal { 
+  pointer-events: auto;          /* 確保能收到點擊 */
+  z-index: 2000;                 /* 要高過下拉選單 */
+}
+
+/* 保證 hidden 真的隱藏（有些 reset 會洗掉 UA 規則） */
+.ks-modal[hidden] { display: none !important; }
+
+/* About modal logo */
+.about-logo {
+  width:64px; height:64px;
+  margin:0 auto 12px;
+  border-radius:14px;
+  background:linear-gradient(135deg,var(--ks-gold),#8f7a2a);
+  color:#0a0a0a;
+  display:grid; place-items:center;
+  font-weight:800; font-size:26px;
+}
+.about-body { text-align:center; line-height:1.6; }
+.about-body p { margin:6px 0; }

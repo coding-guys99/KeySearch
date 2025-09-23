@@ -1,0 +1,224 @@
+/* 網頁版：關掉頂部欄 */
+.is-web .topbar { display: none !important; }
+
+/* 網頁版工具列（右上角按鈕區改搬到頁內） */
+.web-actions {
+  display: none;                /* 預設隱藏，只有網頁版顯示 */
+  position: sticky; top: 0; z-index: 5;
+  padding: 10px 12px;
+  margin: -8px -8px 12px;       /* 視你的容器內距調整 */
+  border-bottom: 1px solid var(--border, #262b36);
+  background: var(--ks-bg-elev, rgba(0,0,0,.35));
+  backdrop-filter: saturate(120%) blur(8px);
+  display: flex; gap: 8px; align-items: center; justify-content: flex-end;
+  flex-wrap: wrap;
+}
+.web-actions .btn {
+  padding: 6px 12px; border: 1px solid var(--border, #262b36);
+  border-radius: 10px; cursor: pointer;
+  background: var(--card, #171a21); color: var(--text, #e7ecf3);
+}
+.web-actions .btn:hover { filter: brightness(1.08); }
+.web-actions .lang {
+  display: inline-flex; gap: 6px; align-items: center;
+}
+.is-web .web-actions { display: flex; }
+
+.web-actions .select{
+  padding:6px 10px; border:1px solid var(--border,#262b36);
+  border-radius:10px; background:var(--card,#171a21); color:var(--text,#e7ecf3);
+}
+
+
+
+:root{
+  --bg:#0f1115;
+  --card:#171a21;
+  --muted:#99a2b2;
+  --text:#e7ecf3;
+  --accent:#6ee7ff;
+  --accent-2:#86efac;
+  --danger:#ff6b6b;
+  --border:#262b36;
+  --radius:12px;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans", Arial, "Apple Color Emoji","Segoe UI Emoji";
+  color:var(--text);
+  background:var(--ks-bg-elev) ;
+}
+
+.topbar{
+  position:sticky; top:0; z-index:10;
+  display:flex; align-items:center; gap:12px;
+  padding:12px 16px; border-bottom:1px solid var(--border);
+  background:var(--ks-bg-elev) ; backdrop-filter:saturate(120%) blur(10px);
+}
+.brand{font-weight:700; letter-spacing:.3px}
+.search-wrap{flex:1}
+.search-wrap input{
+  width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:#0c0e13; color:var(--text);
+}
+.actions{display:flex; gap:8px}
+.actions button,.import-btn{
+  background:var(--ks-bg-elev) ; border:1px solid var(--border); color:var(--text);
+  padding:8px 12px; border-radius:10px; cursor:pointer;
+}
+.import-btn{display:inline-flex; align-items:center; gap:8px}
+
+.filters{
+  padding:10px 16px; border-bottom:1px solid var(--border);
+}
+.filter-row{display:grid; gap:12px; grid-template-columns: repeat(6, minmax(0,1fr));}
+.filter{display:flex; flex-direction:column; gap:6px}
+.filter input, .filter select, .filter button{
+  padding:8px 10px; border-radius:10px; border:1px solid var(--border);
+  background:var(--ks-bg-elev) ; color:var(--ks-fg);
+}
+.filter button{cursor:pointer}
+
+.layout{
+  display:grid; grid-template-columns: 360px 1fr; gap:16px;
+  padding:16px; align-items:start;
+}
+.panel{
+  background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+  padding:16px; position:sticky; top:108px;
+}
+.panel h3{margin:4px 0 12px}
+.field{display:flex; flex-direction:column; gap:6px; margin-bottom:10px}
+.field input, .field select, .field textarea{
+  padding:10px 12px; border-radius:10px; border:1px solid var(--border);
+  background:var(--ks-bg-elev); color:var(--ks-fg); resize:vertical;
+}
+.form-actions{display:flex; gap:8px; flex-wrap:wrap; margin-top:8px}
+.form-actions button{
+  padding:10px 12px; border-radius:10px; border:1px solid var(--border);
+  background:var(--ks-bg-elev) ; color:var(--ks-fg); cursor:pointer;
+}
+.form-actions .danger{border-color:#3a1f22; background:var(--ks-bg-elev) ; color:#ffb3b3}
+
+.hint{color:var(--ks-fg); font-size:.85rem}
+.tips{margin:6px 0 0 18px; color:var(--ks-fg)}
+
+.results{}
+.stats{margin:4px 4px 12px; color:var(--ks-fg)}
+.cards{
+  display:grid; gap:12px;
+  grid-template-columns: repeat( auto-fill, minmax(280px, 1fr) );
+}
+.card{
+  background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+  padding:14px; display:flex; flex-direction:column; gap:10px;
+}
+.card .title{font-weight:700}
+.badges{display:flex; gap:6px; flex-wrap:wrap}
+.badge{
+  font-size:.75rem; padding:4px 8px; border:1px solid var(--border); border-radius:999px; color:var(--ks-fg); background:var(--ks-bg-elev);
+}
+.badge.green{color:var(--ks-fg); background:var(--ks-bg-elev) #0f1912}
+.meta{font-size:.8rem; color:var(--ks-fg)}
+.links{display:flex; gap:8px; flex-wrap:wrap}
+.links a{
+  display:inline-block; padding:6px 10px; border:1px solid var(--border);
+  border-radius:8px; text-decoration:none; color:var(--ks-fg);
+}
+.snippet{color:#cbd5e1}
+.card .row{display:flex; gap:8px; align-items:center; justify-content:space-between}
+.card .row .pill{font-size:.7rem; padding:2px 8px; border-radius:999px; border:1px solid var(--border)}
+.card .row .pill.blue{color:var(--ks-fg); background:var(--ks-bg-elev) }
+.card .row .pill.lime{color:var(--ks-fg); background:var(--ks-bg-elev) }
+
+.foot{
+  padding:16px; text-align:center; color:var(--ks-fg);
+  border-top:1px solid var(--border); margin-top:12px;
+}
+
+/* Responsive */
+@media (max-width: 980px){
+  .layout{grid-template-columns: 1fr}
+  .panel{position:static}
+  .filter-row{grid-template-columns: repeat(2, minmax(0,1fr))}
+}
+
+/* 主題變數：深色為預設 */
+:root{
+  --ks-bg:#0A0A0A;
+  --ks-bg-elev:#151515;
+  --ks-fg:#FFFFFF;
+  --ks-fg-dim:#B9C0CC;
+  --ks-sep:#2a2a2a;
+  --ks-chip-bg:#111214;
+  --ks-gold:#D4AF37;
+  --ks-blue:#2C6EFA;
+}
+
+/* 淺色覆蓋 */
+.ks-theme-light{
+  --ks-bg:#F6F7F9;
+  --ks-bg-elev:#FFFFFF;
+  --ks-fg:#111111;
+  --ks-fg-dim:#3C4451;
+  --ks-sep:#E3E6EB;
+  --ks-chip-bg:#F0F2F5;
+}
+
+/* 讓 body 跟著變 */
+html, body{
+  background: var(--ks-bg);
+  color: var(--ks-fg);
+}
+
+/* 主要容器也要吃變數（避免被硬編色卡住） */
+.layout,
+.panel,
+.cards,
+.card,
+.filters,
+.foot,
+.ks-modal-content {
+  background: var(--ks-bg);
+  color: var(--ks-fg);
+}
+
+/* 提升面（卡片、欄位） */
+.card,
+.panel,
+.ks-menu,
+input, textarea, select, button {
+  background: var(--ks-bg-elev);
+  color: var(--ks-fg);
+  border: 1px solid var(--ks-sep);
+}
+
+/* 佈局內若你有白底/深底硬寫，統一改用變數 */
+.cards .card .snippet,
+.cards .card .links,
+.badge,
+.pill {
+  background: var(--ks-chip-bg);
+  color: var(--ks-fg);
+}
+
+/* 搜尋框/輸入框 focus 外觀保持一致 */
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--ks-blue);
+  box-shadow: 0 0 0 3px rgba(44,110,250,.2);
+}
+
+/* hidden 保險 */
+[hidden]{ display:none !important; }
+
+.hk-label::before {
+  content: " — ";
+  opacity: .8;
+}
+
+summary{
+	pointer-event:"auto";
+}
+	

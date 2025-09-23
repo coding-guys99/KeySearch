@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="en">
+
+<!-- 放在任何 CSS/JS 前面 -->
+<script>
+(function(){
+  const isElectron = !!(window.process?.versions?.electron) || /\bElectron\/\d/.test(navigator.userAgent);
+  if (!isElectron) document.documentElement.classList.add('is-web');
+})();
+</script>
+
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lightweight Knowledge Manager</title>
+  <link rel="stylesheet" href="./css/styles.css" />
+  <link rel="stylesheet" href="./css/topbar.css" />
+  <link rel="stylesheet" href="./css/welcome.css" />
+  <style>
+  /* 只有網頁版才隱藏頂部欄 */
+  .is-web #ks-topbar { display: none !important; }
+
+  /* 網頁版工具列（如果需要美化，可加這段）*/
+  .web-actions {
+    position: sticky; top: 0; z-index: 5;
+    padding: 10px 12px; margin: -8px -8px 12px;
+    border-bottom: 1px solid var(--border, #262b36);
+    background: var(--ks-bg-elev, rgba(0,0,0,.35));
+    backdrop-filter: saturate(120%) blur(8px);
+    display: flex; gap: 8px; align-items: center; justify-content: flex-end; flex-wrap: wrap;
+  }
+  .web-actions .btn,
+  .web-actions .select {
+    padding: 6px 10px; border: 1px solid var(--border,#262b36);
+    border-radius: 10px; background: var(--card,#171a21); color: var(--text,#e7ecf3);
+  }
+  .web-actions .btn:hover { filter: brightness(1.08); }
+</style>
+
+</head>
+<body>
+<header id="ks-topbar" class="ks-topbar ks-theme-dark">
+  <!-- Left -->
+  <div class="ks-left">
+    <div class="ks-brand">
+      <div class="ks-logo">K</div>
+      <div class="ks-appname">KeySearch</div>
+    </div>
+    <button class="ks-chip" id="ks-path-chip" title="">
+      <span class="ks-chip-icon">📁</span>
+      <span class="ks-chip-text" id="ks-path-text">C:\Projects\KeySearch\data</span>
+      <span class="ks-chip-caret">▾</span>
+    </button>
+    <div class="ks-menu ks-menu-chip" id="ks-path-menu" hidden>
+      <button data-act="open"  data-i18n="welcome.open">Open Folder</button>
+      <button data-act="change" data-i18n="welcome.change">Change Folder…</button>
+      <button data-act="copy" data-i18n="welcome.copy">Copy Path</button>
+    </div>
+  </div>
+
+  <!-- Middle -->
+  <nav class="ks-mainmenus">
+    <button class="ks-menubtn" data-menu="file" data-i18n="menu.file">File</button>
+    <button class="ks-menubtn" data-menu="edit" data-i18n="menu.edit">Edit</button>
+    <button class="ks-menubtn" data-menu="view" data-i18n="menu.view">View</button>
+    <button class="ks-menubtn" data-menu="data" data-i18n="menu.data">Data</button>
+    <button class="ks-menubtn" data-menu="help" data-i18n="menu.help">Help</button>
+
+    <!-- Dropdowns -->
+    <div class="ks-menu" id="menu-file" hidden>
+      <button data-act="new"    data-i18n="menu.file.new">New</button>
+      <button data-act="open"   data-i18n="menu.file.open">Open…</button>
+      <hr/>
+      <button data-act="export" data-i18n="menu.file.export">Export CSV…</button>
+      <button data-act="quit"   data-i18n="menu.file.quit">Quit</button>
+    </div>
+    <div class="ks-menu" id="menu-edit" hidden>
+      <button data-act="undo"  data-i18n="menu.edit.undo">Undo</button>
+      <button data-act="redo"  data-i18n="menu.edit.redo">Redo</button>
+      <button data-act="prefs" data-i18n="menu.edit.prefs">Preferences…</button>
+    </div>
+    <div class="ks-menu" id="menu-view" hidden>
+      <button data-act="toggle-theme" data-i18n="menu.view.toggle">Toggle Theme</button>
+      <button data-act="zoom-in"      data-i18n="menu.view.zoomin">Zoom In</button>
+      <button data-act="zoom-out"     data-i18n="menu.view.zoomout">Zoom Out</button>
+    </div>
+    <div class="ks-menu" id="menu-data" hidden>
+      <button data-act="import"  data-i18n="menu.data.import">Import…</button>
+      <button data-act="reindex" data-i18n="menu.data.reindex">Rebuild Index</button>
+    </div>
+    <div class="ks-menu" id="menu-help" hidden>
+      <button data-act="docs"    data-i18n="menu.help.docs">Documentation</button>
+      <button data-act="about"   data-i18n="menu.help.about">About KeySearch</button>
+      <button data-act="welcome" data-i18n="menu.help.welcome">Welcome</button>
+    </div>
+  </nav>
+
+  <!-- Right -->
+  <div class="ks-right">
+    <div class="ks-searchwrap">
+      <input id="ks-search" type="search"
+             data-i18n="search.placeholder" data-i18n-attr="placeholder"
+             placeholder="Search titles, tags, notes…" />
+    </div>
+    <button class="ks-iconbtn" id="ks-bell" data-i18n="app.notifications" data-i18n-attr="title" title="Notifications">🔔<span class="ks-badge" id="ks-bell-badge" hidden></span></button>
+    <div class="ks-menu ks-menu-bell" id="ks-bell-menu" hidden>
+      <div class="ks-menu-title"data-i18n="bell.recent">Recent</div>
+      <div class="ks-menu-list" id="ks-bell-list"></div>
+    </div>
+    <button class="ks-iconbtn" id="ks-gear" data-i18n="app.preferences" data-i18n-attr="title" title="Preferences">⚙️</button>
+    <div class="ks-winbtns">
+      <button id="ks-min">—</button>
+      <button id="ks-max">▢</button>
+      <button id="ks-close">✕</button>
+    </div>
+  </div>
+</header>
+
+<!-- Preferences Modal (Tabbed) -->
+<div id="prefs-modal" class="ks-modal" hidden>
+  <div class="ks-modal-content" role="dialog" aria-modal="true" aria-labelledby="prefs-title">
+    <div class="ks-modal-header">
+      <h2 id="prefs-title" data-i18n="prefs.title">Preferences</h2>
+      <button id="prefs-x" class="ks-iconbtn" title="Close">✕</button>
+    </div>
+
+    <div class="ks-prefs">
+      <!-- 左側分頁 -->
+      <aside class="ks-prefs-tabs" role="tablist" aria-orientation="vertical">
+        <button class="ks-tab is-active" data-tab="general"  role="tab" aria-selected="true" data-i18n="prefs.tabs.general">General</button>
+        <button class="ks-tab"          data-tab="interface" role="tab" data-i18n="prefs.tabs.interface">Interface</button>
+        <button class="ks-tab"          data-tab="search"    role="tab" data-i18n="prefs.tabs.search">Search</button>
+        <button class="ks-tab"          data-tab="hotkeys"   role="tab" data-i18n="prefs.tabs.hotkeys">Hotkeys</button>
+        <button class="ks-tab"          data-tab="advanced"  role="tab" data-i18n="prefs.tabs.advanced">Advanced</button>
+      </aside>
+
+      <!-- 右側內容 -->
+      <section class="ks-prefs-panels">
+        <!-- General -->
+        <div class="ks-panel" data-panel="general">
+          <label class="row">
+            <input type="checkbox" id="pref-auto-backup">
+            <span data-i18n="prefs.general.autobackup">Auto backup</span>
+          </label>
+          <label class="row">
+            <span data-i18n="prefs.general.workspace">Default workspace folder</span>
+            <input type="text" id="pref-workspace" placeholder="C:\Projects\KeySearch\data">
+          </label>
+          <label class="row">
+            <span data-i18n="prefs.general.interval">Backup interval</span>
+            <select id="pref-backup-interval">
+              <option value="manual" data-i18n="prefs.interval.manual">Manual</option>
+              <option value="daily"  data-i18n="prefs.interval.daily">Daily</option>
+              <option value="weekly" data-i18n="prefs.interval.weekly">Weekly</option>
+            </select>
+          </label>
+        </div>
+
+        <!-- Interface -->
+        <div class="ks-panel" data-panel="interface" hidden>
+          <label class="row">
+            <span data-i18n="prefs.interface.theme">Theme</span>
+            <select id="pref-theme">
+              <option value="dark"   data-i18n="theme.dark">Dark</option>
+              <option value="light"  data-i18n="theme.light">Light</option>
+              <option value="system" data-i18n="theme.system">System</option>
+            </select>
+          </label>
+          <label class="row">
+            <span data-i18n="prefs.interface.fontsize">Font size</span>
+            <input type="number" id="pref-fontsize" min="12" max="22" value="14" data-i18n="prefs.font.size"> px
+          </label>
+          <label class="row">
+            <span data-i18n="prefs.interface.layout">Layout</span>
+            <select id="pref-layout">
+              <option value="cards" data-i18n="layout.cards">Cards</option>
+              <option value="list"  data-i18n="layout.list">List</option>
+            </select>
+          </label>
+          <!-- Language -->
+          <label class="row">
+            <span data-i18n="prefs.interface.lang">Language</span>
+            <select id="pref-lang">
+              <option value="en">English</option>
+              <option value="cn">简体中文</option>
+			  <option value="tw">繁體中文</option>
+			  <option value="bm">Bahasa Melayu</option>
+			  <option value="viet">Vietnam</option>
+			  <option value="ko">Korea</option>
+			  <option value="id">Indonesia</option>
+			  <option value="thai">Thailand</option>
+			  <option value="de">Deutsch</option>
+			  <option value="fr">Français</option>
+			  <option value="ja">Japan</option>
+			  <option value="es">Español</option>
+			  <option value="br">português</option>
+			  <option value="ru">русский язык</option>
+			  <option value="sa">al-ʻarabīyah</option>
+			  <option value="in">Hindī</option>
+			  <option value="mn">Mongolian</option>
+			 
+			  
+            </select>
+          </label>
+        </div>
+
+        <!-- Search -->
+        <div class="ks-panel" data-panel="search" hidden>
+          <label class="row">
+            <span data-i18n="prefs.search.sort">Default sort</span>
+            <select id="pref-sort">
+              <option value="updatedAt_desc" data-i18n="prefs.search.updated">Last updated</option>
+              <option value="title_asc"      data-i18n="prefs.search.titleaz">Title (A–Z)</option>
+              <option value="score_desc"     data-i18n="prefs.search.score">Relevance</option>
+              <option value="due_asc"        data-i18n="prefs.search.due">Due date</option>
+            </select>
+          </label>
+          <label class="row">
+            <input type="checkbox" id="pref-fuzzy">
+            <span data-i18n="prefs.search.enablefuzzy">Enable fuzzy search</span>
+          </label>
+          <label class="row">
+            <span data-i18n="prefs.search.max">Max results</span>
+            <input type="number" id="pref-max" min="50" max="5000" value="500">
+          </label>
+        </div>
+
+       <!-- Hotkeys -->
+<div class="ks-panel" data-panel="hotkeys" hidden>
+  <div class="hint" data-i18n="prefs.hotkeys.shortcuts">Common shortcuts</div>
+  <ul class="keys">
+    <li><kbd>Ctrl</kbd> + <kbd>F</kbd><span class="hk-label" data-i18n="prefs.hotkeys.search"></span></li>
+    <li><kbd>Ctrl</kbd> + <kbd>N</kbd><span class="hk-label" data-i18n="prefs.hotkeys.new"></span></li>
+    <li><kbd>Ctrl</kbd> + <kbd>S</kbd><span class="hk-label" data-i18n="prefs.hotkeys.save"></span></li>
+    <li><kbd>Ctrl</kbd> + <kbd>E</kbd><span class="hk-label" data-i18n="prefs.hotkeys.export"></span></li>
+  </ul>
+</div>
+
+
+        <!-- Advanced -->
+        <div class="ks-panel" data-panel="advanced" hidden>
+          <label class="row">
+            <span data-i18n="prefs.adv.dbpath">Database location</span>
+            <input type="text" id="pref-db-path" data-i18n="advanced.IndexedDB" data-i18n-attr="placeholder" placeholder="IndexedDB (default)">
+          </label>
+          <label class="row">
+            <input type="checkbox" id="pref-beta">
+            <span data-i18n="prefs.adv.beta">Enable experimental features</span>
+          </label>
+          <label class="row">
+            <input type="checkbox" id="pref-devtools">
+            <span data-i18n="prefs.adv.devtools">Show debug logs</span>
+          </label>
+        </div>
+      </section>
+    </div>
+
+    <div class="ks-modal-actions">
+      <button id="prefs-reset-welcome" data-i18n="prefs.actions.resetWelcome">Reset Welcome</button>
+      <button id="prefs-reset"  type="button" data-i18n="prefs.actions.reset">Reset</button>
+      <button id="prefs-save"   type="button" class="primary" data-i18n="prefs.actions.save">Save</button>
+      <button id="prefs-close"  type="button" data-i18n="prefs.actions.cancel">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- 只有網頁版會顯示（因為 .is-web 控制） -->
+<div class="web-actions">
+  <button class="btn" id="btn-export-csv">Export CSV</button>
+
+  <label class="lang" for="lang-select" style="display:inline-flex;gap:6px;align-items:center">
+    <span style="opacity:.7">Language:</span>
+    <select id="lang-select" class="select">
+      <option value="en">English</option>
+      <option value="cn">简体中文</option>
+      <option value="tw">繁體中文</option>
+      <option value="bm">Bahasa Melayu</option>
+      <option value="viet">Vietnam</option>
+      <option value="ko">Korea</option>
+      <option value="id">Indonesia</option>
+      <option value="thai">Thailand</option>
+      <option value="de">Deutsch</option>
+      <option value="fr">Français</option>
+      <option value="ja">Japan</option>
+      <option value="es">Español</option>
+      <option value="br">português</option>
+      <option value="ru">русский язык</option>
+      <option value="sa">al-ʻarabīyah</option>
+      <option value="in">Hindī</option>
+      <option value="mn">Mongolian</option>
+    </select>
+  </label>
+</div>
+
+
+
+
+<section class="filters">
+  <div class="filter-row">
+    <div class="filter">
+      <label for="f-identity" data-i18n="filters.identity">Identity</label>
+      <select id="f-identity">
+        <option value=""          data-i18n="filters.all">All</option>
+        <option value="Company" data-i18n="filters.company">Company</option>
+        <option value="Personal" data-i18n="filters.personal">Personal</option>
+      </select>
+    </div>
+    <div class="filter">
+      <label for="f-type" data-i18n="filters.type">Type</label>
+      <select id="f-type">
+        <option value=""          data-i18n="filters.all">All</option>
+        <option value="Project" data-i18n="filters.project">Project</option>
+        <option value="Knowledge" data-i18n="filters.knowledge">Knowledge</option>
+        <option value="Admin" data-i18n="filters.admin">Admin</option>
+        <option value="Resource" data-i18n="filters.resource">Resource</option>
+      </select>
+    </div>
+    <div class="filter">
+      <label for="f-tag" data-i18n="filters.tag">Tag</label>
+      <input id="f-tag" type="text" data-i18n="filters.tag.placeholder" data-i18n-attr="placeholder" placeholder="Filter by a tag (optional)" />
+    </div>
+    <div class="filter">
+      <label for="f-sort" data-i18n="filters.sort">Sort</label>
+      <select id="f-sort">
+        <option value="updatedAt_desc" data-i18n="prefs.search.updated">Last updated ↓</option>
+        <option value="createdAt_desc" data-i18n="prefs.search.created">Created time ↓</option>
+        <option value="title_asc"      data-i18n="prefs.search.titleaz">Title A→Z</option>
+        <option value="score_desc"     data-i18n="prefs.search.score">Relevance ↓ (when searching)</option>
+      </select>
+    </div>
+    <div class="filter">
+      <label>&nbsp;</label>
+      <button id="btn-clear" data-i18n="filters.clear">Clear Filters</button>
+    </div>
+  </div>
+</section>
+
+<main class="layout">
+  <aside class="panel">
+    <h3 data-i18n="form.newedit">New / Edit Item</h3>
+    <form id="item-form">
+      <input type="hidden" id="id" />
+      <div class="field">
+        <label for="title" data-i18n="form.title">Title *</label>
+        <input id="title" data-i18n="form.title.placeholder" data-i18n-attr="placeholder" required placeholder="e.g., Project Proposal" />
+      </div>
+      <div class="field">
+        <label for="identity" data-i18n="form.identity">Identity *</label>
+        <select id="identity" required>
+          <option value="Company" data-i18n="filters.company">Company</option>
+          <option value="Personal" data-i18n="filters.personal">Personal</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="type" data-i18n="form.type">Type *</label>
+        <select id="type" required>
+          <option value="Project" data-i18n="filters.project">Project</option>
+			<option value="Knowledge" data-i18n="filters.knowledge">Knowledge</option>
+			<option value="Admin" data-i18n="filters.admin">Admin</option>
+			<option value="Resource" data-i18n="filters.resource">Resource</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="tags" data-i18n="form.tags">Tags (comma)</label>
+        <input id="tags" data-i18n="form.tag.placeholder" data-i18n-attr="placeholder" placeholder="e.g., finance, design, research" />
+      </div>
+      <div class="field">
+        <label for="links" data-i18n="form.links">Links (comma)</label>
+        <input id="links"  data-i18n="form.links.placeholder" data-i18n-attr="placeholder" placeholder="file:///D:/..., https://..." />
+      </div>
+      <div class="field">
+        <label for="content" data-i18n="form.content">Content</label>
+        <textarea id="content" rows="8" data-i18n="form.content.placeholder" data-i18n-attr="placeholder" placeholder="Write your notes, steps, or details here..."></textarea>
+      </div>
+      <div class="form-actions">
+        <button type="submit" id="btn-save"   data-i18n="form.save">Save</button>
+        <button type="button" id="btn-reset"  data-i18n="form.reset">Reset</button>
+        <button type="button" id="btn-delete" class="danger" disabled data-i18n="form.delete">Delete</button>
+      </div>
+      <p class="hint" data-i18n="form.requiredhint">* Required fields</p>
+    </form>
+
+    <hr />
+    <details>
+		<summary data-i18n="tips.title">Quick Tips</summary>
+			<ul class="tips">
+				<li data-i18n="tips.identity">Use <b>Identity</b> to separate Company vs Personal.</li>
+				<li data-i18n="tips.type">Use <b>Type</b> for Project / Knowledge / Admin / Resource.</li>
+				<li data-i18n="tips.tags">Add <b>Tags</b> so search is easier later (e.g., “invoice”, “BMD”, “NDI”).</li>
+				<li data-i18n="tips.links">Add file/URL in <b>Links</b> to jump to real files.</li>
+			</ul>
+	</details>
+
+  </aside>
+
+  <!-- Welcome Modal -->
+  <div id="welcome-modal" class="welcome-modal" hidden>
+    <div class="welcome-content">
+      <div class="welcome-logo">KS</div>
+      <h2 data-i18n="welcome.title">Welcome to KeySearch</h2>
+      <p data-i18n="welcome.desc">Your workspace has been created at:</p>
+      <pre id="welcome-path">C:\KeySearch\KeySearchData</pre>
+      <div class="welcome-actions">
+        <button id="welcome-open"   type="button" data-i18n="welcome.open">Open Folder</button>
+        <button id="welcome-change" type="button" data-i18n="welcome.change">Change Folder...</button>
+        <label class="welcome-check">
+          <input type="checkbox" id="welcome-dontshow">
+          <span data-i18n="welcome.dontshow">Don’t show this again</span>
+        </label>
+        <button id="welcome-start"  type="button" data-i18n="welcome.start">Get Started</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Modal -->
+  <div id="about-modal" class="ks-modal" hidden>
+    <div class="ks-modal-content" role="dialog" aria-modal="true" aria-labelledby="about-title">
+      <div class="ks-modal-header">
+        <h2 id="about-title" data-i18n="about.title">About KeySearch</h2>
+        <button id="about-x" class="ks-iconbtn" title="Close">✕</button>
+      </div>
+
+      <div class="about-body">
+        <div class="about-logo">KS</div>
+        <p><strong>KeySearch</strong> — <span data-i18n="about.desc">Lightweight Knowledge Manager</span></p>
+        <p><span data-i18n="about.version">Version</span>: <span id="about-version">v1.1.0</span></p>
+        <p>Local-first • No server required • Built with Electron</p>
+        <hr />
+        <p>© 2025 KeySearch Team. All rights reserved.</p>
+      </div>
+
+      <div class="ks-modal-actions">
+        <button id="about-close" data-i18n="prefs.actions.cancel">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="results">
+    <div id="stats" class="stats" data-i18n="new.result">0 results</div>
+    <div id="cards" class="cards"></div>
+  </section>
+</main>
+
+<footer class="foot">
+  <small data-i18n="foot.note">Local-first • IndexedDB • No server required</small>
+</footer>
+
+<!-- i18n must be loaded before your app renders dynamic text -->
+<script src="./js/i18n.js"></script>
+<script src="./js/db.js"></script>
+<script type="module" src="./js/app.js"></script>
+<script src="./js/topbar.js"></script>
+<script src="./js/prefs.js"></script>
+<script src="./js/welcome.js"></script>
+
+<script>
+(function(){
+  /* ===== Export CSV ===== */
+  document.getElementById('btn-export-csv')?.addEventListener('click', () => {
+    if (window.KS?.exportCSV) return window.KS.exportCSV();
+    if (typeof window.onExportCSV === 'function') return window.onExportCSV();
+    alert('Export CSV function not found.');
+  });
+
+  /* ===== Language dropdown (with alias map) ===== */
+  const sel = document.getElementById('lang-select');
+
+  // 你的下拉值 → i18n 可能使用的實際語言碼
+  const LANG_ALIAS = {
+    en: 'en',
+    cn: 'zh_cn',
+    tw: 'zh_tw',
+    bm: 'ms',         // Bahasa Melayu → ms
+    viet: 'vi',       // Vietnam → vi
+    ko: 'ko',
+    id: 'id',
+    thai: 'th',
+    de: 'de',
+    fr: 'fr',
+    ja: 'ja',
+    es: 'es',
+    br: 'pt_br',      // Brazilian Portuguese
+    ru: 'ru',
+    sa: 'ar',         // Arabic
+    in: 'hi',         // Hindi
+    mn: 'mn'
+  };
+
+  function getPrefs(){
+    try { return JSON.parse(localStorage.getItem('ks.prefs')||'{}'); }
+    catch { return {}; }
+  }
+  function setPrefs(p){
+    try { localStorage.setItem('ks.prefs', JSON.stringify(p||{})); } catch {}
+  }
+
+  // 讓 setLang 同步/非同步都能運作；如果 i18n 還沒就緒，等 ready 再跑
+  async function safeSetLang(alias){
+    const lang = LANG_ALIAS[alias] || alias;
+    if (typeof window.setLang !== 'function') {
+      // 等 i18n 模組就緒（如果你在 i18n.js 會 dispatch 事件，可用 'i18n:ready'；沒有就退而求其次等 load）
+      const onReady = () => { window.removeEventListener('i18n:ready', onReady); safeSetLang(alias); };
+      window.addEventListener('i18n:ready', onReady, { once: true });
+      // 保底：頁面 load 後再試一次
+      window.addEventListener('load', () => safeSetLang(alias), { once: true });
+      console.warn('[KS] setLang() not ready; queued.');
+      return;
+    }
+    try {
+      const maybe = window.setLang(lang);
+      if (maybe && typeof maybe.then === 'function') await maybe;
+
+      // 成功後：同步 <html lang> 與偏好
+      document.documentElement.setAttribute('lang', lang);
+      const prefs = getPrefs(); prefs.lang = lang; setPrefs(prefs);
+
+      // 同步下拉顯示（避免外部改語言時不同步）
+      if (sel && sel.value !== alias && [...sel.options].some(o=>o.value===alias)) {
+        sel.value = alias;
+      }
+
+      // 如需刷新畫面上的文字，i18n.setLang 通常會處理；保險起見可 rerender
+      window.KS?.rerender?.();
+    } catch (err) {
+      console.error('[KS] setLang failed:', err);
+      alert('Switch language failed.');
+    }
+  }
+
+  function initLangSelect(){
+    if (!sel) return;
+    const prefs = getPrefs();
+    // 先從 prefs.lang（實際碼）推回 alias；找不到就用 <html lang> 或 en
+    const currentReal = (prefs.lang || document.documentElement.getAttribute('lang') || 'en').toLowerCase();
+    const alias = Object.keys(LANG_ALIAS).find(a => LANG_ALIAS[a] === currentReal) || currentReal;
+    if ([...sel.options].some(o=>o.value===alias)) sel.value = alias;
+  }
+
+  sel?.addEventListener('change', () => {
+    const alias = sel.value;
+    safeSetLang(alias);
+  });
+
+  initLangSelect();
+  window.addEventListener('load', initLangSelect);
+})();
+
+/* ===== Preferences 內的語言下拉也接同一套邏輯 ===== */
+  const prefSel = document.getElementById('pref-lang');
+  // 將 pref 的值映射到我們的 alias（與上方 LANG_ALIAS 一致）
+  const REAL_TO_ALIAS = Object.entries(LANG_ALIAS).reduce((acc,[alias,real]) => (acc[real]=alias, acc), {});
+  function initPrefLang(){
+    if (!prefSel) return;
+    const currentReal = (JSON.parse(localStorage.getItem('ks.prefs')||'{}').lang) 
+                        || document.documentElement.getAttribute('lang') 
+                        || 'en';
+    const alias = REAL_TO_ALIAS[currentReal] || currentReal;
+    if ([...prefSel.options].some(o=>o.value===alias)) prefSel.value = alias;
+  }
+  prefSel?.addEventListener('change', ()=>{
+    const alias = prefSel.value;
+    // 讓偏好面板的下拉也使用同一個切換流程
+    // （會更新 setLang、<html lang>、ks.prefs.lang、同步外面的 #lang-select）
+    safeSetLang(alias);
+  });
+  initPrefLang();
+  window.addEventListener('load', initPrefLang);
+})();
+
+</script>
+
+
+
+
+</body>
+</html>
