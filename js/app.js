@@ -125,7 +125,7 @@ function getDemoCards(){
       identity: 'Company',
       type: 'Knowledge',
       tags: ['demo','getting-started'],
-      links: ['https://example.com/keysearch/docs'],
+      links: ['https://keysearch-app.com'],
       content: t('demo.quickstart.content'),
       createdAt: now,
       updatedAt: now
@@ -137,7 +137,7 @@ function getDemoCards(){
       identity: 'Company',
       type: 'Project',
       tags: ['demo','web','design'],
-      links: ['https://www.figma.com/','https://trello.com/'],
+      links: ['https://keysearch-app.com','https://keysearch-app.com'],
       content: t('demo.project.content'),
       createdAt: now,
       updatedAt: now
@@ -519,6 +519,7 @@ if (typeof readPrefs === 'function' && typeof applyPrefs === 'function') {
     }
   });
 }
+
 
 
 
