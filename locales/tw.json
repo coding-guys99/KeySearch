@@ -138,13 +138,14 @@
   "form.requiredhint": "* 必填欄位",
   
   "tips.title": "快速提示",
-  "tips.identity": "使用 [身份] 區分公司與個人。",
-  "tips.type": "使用 [類型] 標示 專案 / 知識 / 管理 / 資源。",
-  "tips.tags": "新增 [標籤] 方便日後搜尋（例如：“發票”、“BMD”、“NDI”）。",
-  "tips.links": "在 [連結] 中加入檔案或網址以快速開啟實際檔案。",
+  "tips.identity": "使用 [身份] 來區分是公司還是個人。",
+"tips.type": "使用 [類型] 來標記是專案、知識、管理或資源。",
+"tips.tags": "新增 [標籤] 以方便搜尋（例如：invoice、design、research）。",
+"tips.links": "在 [連結] 中放檔案或網址，就能直接開啟。"
   "new.result": "0 筆結果",
   
   "foot.note": "本地優先 • IndexedDB • 不需伺服器"
 }
+
 
 
