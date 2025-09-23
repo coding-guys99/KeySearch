@@ -97,6 +97,15 @@
   "demo.quickstart.content": "• Add / edit cards in the left panel\n• Use tags (e.g., invoice, design) for easier search...",
   "demo.project.title": "Project Example: Website Revamp",
   "demo.project.content": "Goal: Refresh marketing site hero + pricing page\nTasks:\n- Audit current copy...",
+  "btn.edit": "Edit",
+  "card.openFile": "Open File",
+  "card.openLink": "Open Link",
+  "identity.company": "Company",
+  "identity.personal": "Personal",
+  "type.project": "Project",
+  "type.knowledge": "Knowledge",
+  "type.admin": "Admin",
+  "type.resource": "Resource",
 
   "filters.identity": "Identity",
   "filters.all": "All",
@@ -137,4 +146,5 @@
   "foot.note": "Local-first • IndexedDB • No server required"
 
 }
+
 
