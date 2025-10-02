@@ -221,4 +221,13 @@ input:focus, textarea:focus, select:focus {
 summary{
 	pointer-event:"auto";
 }
+
+/* 放到你的 styles.css */
+.file-actions { display:inline-flex; gap:6px; }
+.file-actions .linkbtn {
+  padding: 4px 8px; border: 1px solid var(--border,#262b36);
+  border-radius: 8px; background: var(--card,#171a21); color: var(--text,#e7ecf3);
+  cursor: pointer; font-size: .9em;
+}
+.file-actions .linkbtn:hover { filter: brightness(1.08); }
 	
