@@ -180,20 +180,40 @@ function render() {
   }
 }
 
+function isWeb() {
+  return document.documentElement.classList.contains('is-web');
+}
+
 function renderCard(it) {
   const t = (k, fb) => (window.i18n?.t ? window.i18n.t(k) : k) || fb || k;
 
   const tags = (it.tags||[]).map(tag => `<span class="badge">${escapeHtml(tag)}</span>`).join('');
+
+  // ⬇️ 這段改過：web + file:// 顯示按鈕；其他維持 <a>
   const links = (it.links||[]).map(u=>{
-    const label = u.startsWith('file:///') ? t('card.openFile','Open File') : t('card.openLink','Open Link');
-    return `<a href="${escapeAttr(u)}" target="_blank" rel="noopener">${label}</a>`;
+    const isFile = u.startsWith('file:///');
+    if (isWeb() && isFile) {
+      return `
+        <span class="file-actions">
+          <button class="linkbtn" data-act="copy" data-url="${escapeAttr(u)}">
+            ${t('card.copyPath','Copy path')}
+          </button>
+          <button class="linkbtn" data-act="why">
+            ${t('card.whyBlocked','Why can’t open?')}
+          </button>
+        </span>`;
+    } else {
+      const label = isFile ? t('card.openFile','Open File') : t('card.openLink','Open Link');
+      return `<a href="${escapeAttr(u)}" target="_blank" rel="noopener">${label}</a>`;
+    }
   }).join('');
+
   const snippet = (it.content||'').slice(0,220);
   const updated = it.updatedAt ? new Date(it.updatedAt).toLocaleString() : '';
   const identityLabel = it.identity === 'Company' ? t('identity.company','Company') : t('identity.personal','Personal');
   const typeLabel = t(`type.${(it.type||'').toLowerCase()}`, it.type || '');
-
   const demoAttr = it._demo ? ' data-demo="1"' : '';
+
   return `
     <article class="card"${demoAttr} data-id="${escapeAttr(it.id)}">
       <div class="row">
@@ -216,6 +236,7 @@ function renderCard(it) {
     </article>
   `;
 }
+
 
 /* ======================= 表單 ======================= */
 function loadForm(it) {
