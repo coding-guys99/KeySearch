@@ -323,7 +323,7 @@ function renderCard(it) {
     : `<span class="no-link" style="opacity:.7">${t('card.noLink','No link set')}</span>`;
 
   const snippet = (it.content || '').slice(0, 220);
-  const updated = it.updatedAt ? new Date(it.updatedAt).toLocaleString() : '';
+  const updated = it.updatedAt || '';
   const identityLabel = it.identity === 'Company'
     ? t('identity.company','Company')
     : t('identity.personal','Personal');
@@ -395,23 +395,24 @@ async function onSave(e) {
   const nowDisp = formatDisplayTime(now);     // 顯示用：YYYY-MM-DD Time:hh:mmam/pm
 
   const existing = cache.find(x => x.id === id);
-  const createdAt = existing?.createdAt
+  const createdAt = existing?.createdAt || formatDisplayTime(new Date());
     ? existing.createdAt
     : formatCreatedAt(new Date());            // 你原本的建立時間格式化函式
+  // 每次儲存都更新 updatedAt
+const updatedAt = formatDisplayTime(new Date());
 
   const item = {
-    id,
-    title,
-    identity: els.identity?.value || 'Company',
-    type: els.type?.value || 'Project',
-    tags: splitComma(els.tags?.value),
-    links: normalizeLinksFromInput(els.links?.value),
-    content: els.content?.value || '',
-    createdAt,                 // 自訂建立時間（維持不變）
-    updatedAtRaw: nowISO,      // 內部/排序用
-    updatedAt: nowDisp,        // 顯示給使用者看的「最後更新」
-    _v: (existing?._v || 0) + 1
-  };
+  id,
+  title,
+  identity: els.identity?.value || 'Company',
+  type: els.type?.value || 'Project',
+  tags: splitComma(els.tags?.value),
+  links: normalizeLinksFromInput(els.links?.value),
+  content: els.content?.value || '',
+  createdAt,
+  updatedAt,
+  _v: (existing?._v || 0) + 1
+};
 
   let dbOK = false;
   try {
