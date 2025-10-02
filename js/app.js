@@ -3,10 +3,7 @@ import { filterAndSearch, sortItems } from './search.js';
 
 /* ======================= Welcome（啟動一次） ======================= */
 let KS_SESSION_WELCOME_SHOWN = false;
-
-function shouldShowWelcome() {
-  return !localStorage.getItem('ks.dontshow');
-}
+function shouldShowWelcome() { return !localStorage.getItem('ks.dontshow'); }
 function tryOpenWelcomeOnce() {
   if (KS_SESSION_WELCOME_SHOWN) return true;
   if (window.Welcome && typeof window.Welcome.open === 'function') {
@@ -20,10 +17,7 @@ function tryOpenWelcomeOnce() {
 function maybeShowWelcomeAtStartup() {
   if (!shouldShowWelcome()) return;
   if (tryOpenWelcomeOnce()) return;
-  const onReady = () => {
-    window.removeEventListener('ks:welcome-ready', onReady);
-    tryOpenWelcomeOnce();
-  };
+  const onReady = () => { window.removeEventListener('ks:welcome-ready', onReady); tryOpenWelcomeOnce(); };
   window.addEventListener('ks:welcome-ready', onReady);
   [0, 200, 600, 1200].forEach(ms => setTimeout(() => tryOpenWelcomeOnce(), ms));
 }
@@ -62,13 +56,16 @@ const els = {
 let cache = [];
 let currentSort = 'updatedAt_desc';
 
-/* ======================= 初始化 ======================= */
+/* ======================= 初始化（先等 i18nReady） ======================= */
 async function init() {
+  if (window.i18nReady) { try { await window.i18nReady; } catch {} } // ✅ 等字典
   cache = await dbAll();
   bindEvents();
   render();
   maybeShowWelcomeAtStartup();
 }
+// 語言切換完成 → 重畫（卡片/文字即時更新）
+window.addEventListener('ks:i18n-changed', () => { if (typeof render === 'function') render(); });
 
 function bindEvents() {
   [els.q, els.fIdentity, els.fType, els.fTag, els.fSort].forEach(el => {
@@ -97,8 +94,7 @@ function bindEvents() {
   els.btnExportCsv?.addEventListener('click', onExportCSV);
   els.importFile?.addEventListener('change', onImport);
 
-  console.debug('[KS] bindEvents:',
-    !!els.form, !!els.btnSave, !!els.title, !!els.identity, !!els.type);
+  console.debug('[KS] bindEvents:', !!els.form, !!els.btnSave, !!els.title, !!els.identity, !!els.type);
 }
 
 /* ======================= 渲染 ======================= */
@@ -112,39 +108,37 @@ function readFilters(){
   };
 }
 
-// === Demo cards (render-only; not stored in DB) ===
+// === Demo cards（僅顯示，不寫入 DB；支援 i18n） ===
 function getDemoCards(){
-  // 只要在這裡維護 i18n key；實際字在 /locales/*.json
-  const t = (k) => (window.i18n?.t(k) || k);
+  const t = (k, fb) => (window.i18n?.t ? window.i18n.t(k) : k) || fb || k;
   const now = new Date().toISOString();
   return [
     {
       id: 'demo-quickstart',
       _demo: true,
-      title: t('demo.quickstart.title'),
+      title: t('demo.quickstart.title', 'Quick start'),
       identity: 'Company',
       type: 'Knowledge',
       tags: ['demo','getting-started'],
       links: ['https://keysearch-app.com'],
-      content: t('demo.quickstart.content'),
+      content: t('demo.quickstart.content', 'This is a quick start card.'),
       createdAt: now,
       updatedAt: now
     },
     {
       id: 'demo-project',
       _demo: true,
-      title: t('demo.project.title'),
+      title: t('demo.project.title', 'Sample project'),
       identity: 'Company',
       type: 'Project',
       tags: ['demo','web','design'],
       links: ['https://keysearch-app.com','https://keysearch-app.com'],
-      content: t('demo.project.content'),
+      content: t('demo.project.content', 'This is a sample project card.'),
       createdAt: now,
       updatedAt: now
     }
   ];
 }
-
 
 function render() {
   const { q, identity, type, tag, sort } = readFilters();
@@ -152,29 +146,27 @@ function render() {
   items = sortItems(items, sort || 'updatedAt_desc');
   currentSort = sort || 'updatedAt_desc';
 
-  // 👉 只有在「資料庫真的為空」時，顯示示例卡
+  // 只有在「資料庫為空」時顯示示例卡
   const useDemo = (cache.length === 0);
-  if (useDemo) {
-    items = getDemoCards();
-  }
+  if (useDemo) items = getDemoCards();
 
   if (els.stats) {
-    // 小提示：讓使用者知道目前看到的是示例
-    const label = useDemo ? `${items.length} examples` : `${items.length} result${items.length===1?'':'s'}`;
+    const t = (k, fb) => (window.i18n?.t ? window.i18n.t(k) : k) || fb || k;
+    const label = useDemo
+      ? t('stats.examples', `${items.length} examples`)
+      : `${items.length} result${items.length===1?'':'s'}`;
     els.stats.textContent = label;
   }
 
   if (els.cards) {
     els.cards.innerHTML = items.map(renderCard).join('');
-
-    // 若是示例卡，不綁定「Edit」；避免誤以為能改
     $$('.card').forEach(card => {
       const isDemo = card.hasAttribute('data-demo');
       const btn = card.querySelector('.edit-btn');
       if (!btn) return;
       if (isDemo) {
         btn.disabled = true;
-        btn.title = 'This is an example card';
+        btn.title = (window.i18n?.t?.('hint.exampleCard') || 'This is an example card');
         btn.classList.add('is-disabled');
         return;
       }
@@ -188,32 +180,25 @@ function render() {
   }
 }
 
-
 function renderCard(it) {
-  const t = (k) => window.i18n?.t ? window.i18n.t(k) : k;
+  const t = (k, fb) => (window.i18n?.t ? window.i18n.t(k) : k) || fb || k;
 
-  const tags = (it.tags||[]).map(tag => 
-    `<span class="badge">${escapeHtml(tag)}</span>`).join('');
-
+  const tags = (it.tags||[]).map(tag => `<span class="badge">${escapeHtml(tag)}</span>`).join('');
   const links = (it.links||[]).map(u=>{
-    const label = u.startsWith('file:///') 
-      ? t('card.openFile') 
-      : t('card.openLink');
+    const label = u.startsWith('file:///') ? t('card.openFile','Open File') : t('card.openLink','Open Link');
     return `<a href="${escapeAttr(u)}" target="_blank" rel="noopener">${label}</a>`;
   }).join('');
-
   const snippet = (it.content||'').slice(0,220);
   const updated = it.updatedAt ? new Date(it.updatedAt).toLocaleString() : '';
+  const identityLabel = it.identity === 'Company' ? t('identity.company','Company') : t('identity.personal','Personal');
+  const typeLabel = t(`type.${(it.type||'').toLowerCase()}`, it.type || '');
 
-  // i18n identity / type
-  const identityLabel = it.identity === 'Company' ? t('identity.company') : t('identity.personal');
-  const typeLabel = t(`type.${it.type.toLowerCase()}`);
-
+  const demoAttr = it._demo ? ' data-demo="1"' : '';
   return `
-    <article class="card" data-id="${escapeAttr(it.id)}">
+    <article class="card"${demoAttr} data-id="${escapeAttr(it.id)}">
       <div class="row">
         <div class="title">${escapeHtml(it.title)}</div>
-        <button class="edit-btn">${t('btn.edit')}</button>
+        <button class="edit-btn">${t('btn.edit','Edit')}</button>
       </div>
       <div class="badges">
         <span class="badge ${it.identity==='Company'?'green':''}">${identityLabel}</span>
@@ -225,15 +210,14 @@ function renderCard(it) {
       <div class="meta">
         <span class="pill">${identityLabel}</span>
         <span class="pill">${typeLabel}</span>
-        <span style="margin-left:8px">Updated: ${escapeHtml(updated)}</span>
+        <span style="margin-left:8px">${t('meta.updated','Updated')}: ${escapeHtml(updated)}</span>
         ${typeof it._score==='number' ? `<span style="margin-left:auto">Score: ${it._score}</span>` : ''}
       </div>
     </article>
   `;
 }
 
-
-
+/* ======================= 表單 ======================= */
 function loadForm(it) {
   if (!it) {
     els.id       && (els.id.value = '');
@@ -256,7 +240,7 @@ function loadForm(it) {
   els.btnDelete && (els.btnDelete.disabled = false);
 }
 
-/* ======================= 事件處理 ======================= */
+/* ======================= 事件：新增/更新/刪除 ======================= */
 async function onSave(e) {
   e?.preventDefault?.();
 
@@ -285,23 +269,19 @@ async function onSave(e) {
       await dbAddOrUpdate(item);
       dbOK = true;
     }
-  } catch (err) {
-    console.error('[KS] dbAddOrUpdate failed:', err);
-  }
+  } catch (err) { console.error('[KS] dbAddOrUpdate failed:', err); }
 
   try {
     if (dbOK && typeof dbAll === 'function') {
       cache = await dbAll();
     } else {
       const idx = cache.findIndex(x => x.id === id);
-      if (idx >= 0) cache[idx] = item;
-      else cache.push(item);
+      if (idx >= 0) cache[idx] = item; else cache.push(item);
     }
   } catch (err) {
     console.error('[KS] dbAll failed:', err);
     const idx = cache.findIndex(x => x.id === id);
-    if (idx >= 0) cache[idx] = item;
-    else cache.push(item);
+    if (idx >= 0) cache[idx] = item; else cache.push(item);
   }
 
   // 可選：避免新卡片被當前篩選藏起來
@@ -355,20 +335,16 @@ function itemsToCSV(items) {
   const body = rows.map(r => r.join(',')).join('\r\n');
   return header + '\r\n' + body;
 }
-
 function csvEscape(value) {
   let s = (value == null ? '' : String(value));
   if (/[",\r\n]/.test(s)) s = '"' + s.replace(/"/g, '""') + '"';
   return s;
 }
 
-// 通用：原生 Save 對話框；不支援時 fallback 到 prompt + a[download]
+// 原生 Save 對話框；不支援時 fallback
 async function saveBlobWithPicker(blob, suggestedName, typeSpec = { description: 'File', accept: { 'application/octet-stream': ['.*'] } }) {
   if (window.showSaveFilePicker) {
-    const handle = await window.showSaveFilePicker({
-      suggestedName,
-      types: [typeSpec]
-    });
+    const handle = await window.showSaveFilePicker({ suggestedName, types: [typeSpec] });
     const writable = await handle.createWritable();
     await writable.write(blob);
     await writable.close();
@@ -376,11 +352,8 @@ async function saveBlobWithPicker(blob, suggestedName, typeSpec = { description:
     let name = prompt('Enter a file name', suggestedName) || suggestedName;
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url;
-    a.download = name;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
     URL.revokeObjectURL(url);
   }
 }
@@ -400,10 +373,7 @@ async function onExportCSV() {
   const suggested = parts.join('-') + '.csv';
 
   try {
-    await saveBlobWithPicker(blob, suggested, {
-      description: 'CSV File',
-      accept: { 'text/csv': ['.csv'] }
-    });
+    await saveBlobWithPicker(blob, suggested, { description: 'CSV File', accept: { 'text/csv': ['.csv'] } });
   } catch (err) {
     console.error('[KS] save CSV failed:', err);
     alert('Save failed: ' + (err?.message || err));
@@ -468,9 +438,7 @@ function normalizeLink(raw = '') {
   }
   return s;
 }
-function normalizeLinksFromInput(input = '') {
-  return splitComma(input).map(normalizeLink);
-}
+function normalizeLinksFromInput(input = '') { return splitComma(input).map(normalizeLink); }
 
 /* ======================= 對外 API ======================= */
 window.KS = {
@@ -523,9 +491,3 @@ if (typeof readPrefs === 'function' && typeof applyPrefs === 'function') {
     }
   });
 }
-
-
-
-
-
-
