@@ -56,21 +56,36 @@ const els = {
 let cache = [];
 let currentSort = 'updatedAt_desc';
 
-// 連續序號（從 1 開始；init 時會自動更新成最大值+1）
+// ====== 序號 ID 與時間格式 ======
 let KS_SEQ = 1;
 
-// 顯示用時間：2025-10-02 Time:11:45am
-function formatDisplayTime(d = new Date()) {
-  const pad = n => String(n).padStart(2, '0');
-  const yyyy = d.getFullYear();
-  const mm = pad(d.getMonth() + 1);
-  const dd = pad(d.getDate());
-  let h = d.getHours();
-  const m = pad(d.getMinutes());
-  const ampm = h >= 12 ? 'pm' : 'am';
-  h = h % 12 || 12;
-  return `${yyyy}-${mm}-${dd} Time:${h}:${m}${ampm}`;
+// 掃描目前資料，把 KS_SEQ 設成「已存在最大數字 ID + 1」
+function initSeqFromDB(items = []) {
+  let maxNum = 0;
+  for (const it of items) {
+    const n = Number(it.id);
+    if (Number.isFinite(n)) maxNum = Math.max(maxNum, n);
+  }
+  KS_SEQ = maxNum + 1;
 }
+
+// 時間顯示：2025/10/02, 02:33pm
+function formatDisplayTime(d = new Date()) {
+  const pad = n => n.toString().padStart(2, '0');
+
+  const year = d.getFullYear();
+  const month = pad(d.getMonth() + 1);
+  const day = pad(d.getDate());
+
+  let hours = d.getHours();
+  const minutes = pad(d.getMinutes());
+  const ampm = hours >= 12 ? 'pm' : 'am';
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+
+  return `${year}/${month}/${day}, ${pad(hours)}:${minutes}${ampm}`;
+}
+
 
 
 /* ======================= 初始化（先等 i18nReady） ======================= */
@@ -78,18 +93,14 @@ async function init() {
   if (window.i18nReady) { try { await window.i18nReady; } catch {} }
   cache = await dbAll();
 
-  // 🔽 初始化序號：把現有資料的 id（可解析成整數者）找最大 + 1
-  if (cache.length > 0) {
-    const nums = cache
-      .map(x => parseInt(x.id, 10))
-      .filter(n => Number.isFinite(n) && n > 0);
-    if (nums.length > 0) KS_SEQ = Math.max(...nums) + 1;
-  }
+  // 🔢 載完資料後，初始化序號
+  initSeqFromDB(cache);
 
   bindEvents();
   render();
   maybeShowWelcomeAtStartup();
 }
+
 
 // 語言切換完成 → 重畫（卡片/文字即時更新）
 window.addEventListener('ks:i18n-changed', () => { if (typeof render === 'function') render(); });
@@ -295,40 +306,36 @@ function renderCard(it) {
 
   const tags = (it.tags||[]).map(tag => `<span class="badge">${escapeHtml(tag)}</span>`).join('');
 
-  // file:// → web 顯示 Copy Path；桌面顯示 Open File；http/https → <a>
-  const rawLinks = it.links || [];
-  const links = rawLinks.length
-    ? rawLinks.map(u => {
-        if (u.startsWith('file:///')) {
-          if (IS_WEB) {
-            return `
-              <button class="link-btn"
-                      data-act="copy-path"
-                      data-url="${escapeAttr(u)}"
-                      title="${t('card.cannotOpenWeb','Browsers can’t open local files. Click to copy the path.')}">
-                ${t('card.copyPath','Copy Path')}
-              </button>`;
-          } else {
-            return `
-              <button class="link-btn"
-                      data-act="open-file"
-                      data-url="${escapeAttr(u)}">
-                ${t('card.openFile','Open File')}
-              </button>`;
-          }
-        }
-        return `<a href="${escapeAttr(u)}" target="_blank" rel="noopener">${t('card.openLink','Open Link')}</a>`;
-      }).join('')
-    : `<span class="no-link" style="opacity:.7">${t('card.noLink','No link set')}</span>`;
+  const links = (it.links || []).map(u => {
+    if (u.startsWith('file:///')) {
+      if (IS_WEB) {
+        return `
+          <button class="link-btn"
+                  data-act="copy-path"
+                  data-url="${escapeAttr(u)}"
+                  title="${t('card.cannotOpenWeb','Browsers can’t open local files. Click to copy the path.')}">
+            ${t('card.copyPath','Copy Path')}
+          </button>`;
+      } else {
+        return `
+          <button class="link-btn"
+                  data-act="open-file"
+                  data-url="${escapeAttr(u)}">
+            ${t('card.openFile','Open File')}
+          </button>`;
+      }
+    }
+    return `<a href="${escapeAttr(u)}" target="_blank" rel="noopener">${t('card.openLink','Open Link')}</a>`;
+  }).join('');
 
   const snippet = (it.content||'').slice(0,220);
-
-  // ✅ 直接用儲存好的字串，不再 new Date(...)，避免 Invalid Date
-  const updated = it.updatedAt || '';
-
   const identityLabel = it.identity === 'Company' ? t('identity.company','Company') : t('identity.personal','Personal');
   const typeLabel = t(`type.${(it.type||'').toLowerCase()}`, it.type || '');
   const demoAttr = it._demo ? ' data-demo="1"' : '';
+
+  // ✅ 直接使用字串（已是 2025/10/02, 02:33pm 格式）
+  const updated = it.updatedAt || '';
+  const created = it.createdAt || '';
 
   return `
     <article class="card"${demoAttr} data-id="${escapeAttr(it.id)}">
@@ -344,14 +351,18 @@ function renderCard(it) {
       <div class="snippet">${escapeHtml(snippet)}${(it.content||'').length>220?'…':''}</div>
       <div class="links">${links}</div>
       <div class="meta">
+        <span class="pill">ID: ${escapeHtml(it.id)}</span>
         <span class="pill">${identityLabel}</span>
         <span class="pill">${typeLabel}</span>
-        <span style="margin-left:8px">${t('meta.updated','Updated')}: ${escapeHtml(updated)}</span>
-        ${typeof it._score==='number' ? `<span style="margin-left:auto">Score: ${it._score}</span>` : ''}
+        <span style="margin-left:auto">
+          ${t('meta.created','Created')}: ${escapeHtml(created)} &nbsp; | &nbsp;
+          ${t('meta.updated','Updated')}: ${escapeHtml(updated)}
+        </span>
       </div>
     </article>
   `;
 }
+
 
 
 
@@ -380,22 +391,25 @@ function loadForm(it) {
 }
 
 /* ======================= 事件：新增/更新/刪除 ======================= */
+/* ======================= 事件：新增/更新/刪除 ======================= */
 async function onSave(e) {
   e?.preventDefault?.();
 
   const title = (els.title?.value || '').trim();
   if (!title) { alert('Title is required.'); return; }
 
-  // 保留你現有的 ID 邏輯（如有用流水號，就用你的 nextId()）
-  let id = els.id?.value || (crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()));
+  // 先檢查是否為編輯
+  let id = els.id?.value?.trim();
+  const isEdit = !!id;
 
-  // 取既有項目（編輯時）
+  // 🆔 新增就用連號字串
+  if (!isEdit) id = String(KS_SEQ++);
+
+  // 找舊資料（若是編輯）
   const existing = cache.find(x => x.id === id);
 
-  // 建立時間：新增時用顯示格式；編輯則沿用舊值
+  // 🕒 建立/更新時間（都是顯示字串，不再存 ISO）
   const createdAt = existing?.createdAt || formatDisplayTime(new Date());
-
-  // 更新時間：每次儲存都用顯示格式
   const updatedAt = formatDisplayTime(new Date());
 
   const item = {
@@ -406,8 +420,8 @@ async function onSave(e) {
     tags: splitComma(els.tags?.value),
     links: normalizeLinksFromInput(els.links?.value),
     content: els.content?.value || '',
-    createdAt,      // ← 已是 "YYYY/MM/DD, hh:mmam"
-    updatedAt,      // ← 已是 "YYYY/MM/DD, hh:mmam"
+    createdAt,      // 例如：2025/10/02, 11:45am
+    updatedAt,      // 例如：2025/10/02, 02:33pm
     _v: (existing?._v || 0) + 1
   };
 
@@ -417,11 +431,15 @@ async function onSave(e) {
       await dbAddOrUpdate(item);
       dbOK = true;
     }
-  } catch (err) { console.error('[KS] dbAddOrUpdate failed:', err); }
+  } catch (err) {
+    console.error('[KS] dbAddOrUpdate failed:', err);
+  }
 
   try {
     if (dbOK && typeof dbAll === 'function') {
       cache = await dbAll();
+      // DB 變動後再保險更新一次序號
+      initSeqFromDB(cache);
     } else {
       const idx = cache.findIndex(x => x.id === id);
       if (idx >= 0) cache[idx] = item; else cache.push(item);
@@ -432,7 +450,7 @@ async function onSave(e) {
     if (idx >= 0) cache[idx] = item; else cache.push(item);
   }
 
-  // 清表單 & 重繪
+  // 清篩選與表單，重繪
   els.q         && (els.q.value = '');
   els.fIdentity && (els.fIdentity.value = '');
   els.fType     && (els.fType.value = '');
@@ -442,6 +460,7 @@ async function onSave(e) {
   loadForm(null);
   render();
 }
+
 
 
 
