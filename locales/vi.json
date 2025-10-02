@@ -115,7 +115,7 @@
 "type.project": "Dự án",
 "type.knowledge": "Kiến thức",
 "type.admin": "Quản trị",
-"type.resource": "Tài nguyên"
+"type.resource": "Tài nguyên",
 
 
   "filters.identity": "Danh tính",
@@ -157,6 +157,7 @@
   
   "foot.note": "Local-first • IndexedDB • Không cần máy chủ"
 }
+
 
 
 
