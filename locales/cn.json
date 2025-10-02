@@ -94,18 +94,29 @@
   "about.version": "版本",
 
   "demo.quickstart.title": "👋 欢迎 — 快速开始",
-"demo.quickstart.content": "• 在左侧面板新增/编辑卡片\n• 使用标签（如：invoice、design）方便搜索\n• 链接支持 http(s) 和 Windows 路径\n• 网页导出 CSV → 桌面版导入 JSON",
+"demo.quickstart.content": "• 在左侧面板新增 / 编辑卡片\n• 使用标签（例如：invoice, design）让搜索更方便...",
 "demo.project.title": "项目示例：网站改版",
-"demo.project.content": "目标：更新主视觉 + 定价页\n任务：\n- 审核文案\n- 新的视觉方向（Figma）\n- A/B 测试定价布局",
-  "btn.edit": "编辑",
+"demo.project.content": "目标：更新营销网站的主视觉与价格页\n任务：\n- 审核当前文案...",
+"btn.edit": "编辑",
 "card.openFile": "打开文件",
 "card.openLink": "打开链接",
+"card.copyPath": "复制路径",
+"card.copied": "已复制！",
+"card.copyFailed": "复制失败，请再试一次。",
+"card.cannotOpenWeb": "浏览器无法打开本地文件。点击以复制路径。",
+"card.noLink": "尚未设置链接",
+"card.openFailed": "打开失败。",
+"card.desktopOnly": "此操作仅适用于桌面版应用。",
+"hint.exampleCard": "这是一张示例卡片",
+"meta.updated": "已更新",
+"stats.examples": "{n} 个示例",
 "identity.company": "公司",
 "identity.personal": "个人",
 "type.project": "项目",
 "type.knowledge": "知识",
 "type.admin": "管理",
-"type.resource": "资源",
+"type.resource": "资源"
+
 
   "filters.identity": "身份",
   "filters.all": "全部",
@@ -146,6 +157,7 @@
   
   "foot.note": "本地优先 • IndexedDB • 无需服务器"
 }
+
 
 
 
