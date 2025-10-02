@@ -2,7 +2,7 @@
 // Lightweight i18n helper for KeySearch
 (function () {
   // ---- alias（可選）：如果你的 <option value="cn"> 想對應 zh-CN，就在這裡對應 ----
-  const ALIASES = { cn: 'zh-CN', tw: 'zh-TW', br: 'pt-BR' };
+  const ALIASES = { cn: 'cn', tw: 'tw', br: 'pt' };
   const resolveAlias = (code) => (ALIASES[code] || code);
 
   // ---- locale 正規化與候選 ----
@@ -139,3 +139,4 @@
     window.KS?.rerender?.();
   };
 })();
+
