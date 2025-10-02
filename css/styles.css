@@ -1,33 +1,55 @@
-/* 網頁版：關掉頂部欄 */
-.is-web .topbar { display: none !important; }
+/* 只有網頁版才隱藏 Electron 頂欄，不會影響這個區塊 */
+.is-web #ks-topbar { display: none !important; }
 
-/* 網頁版工具列（右上角按鈕區改搬到頁內） */
+/* 重新定義 web-actions：做成置頂工具列 */
 .web-actions {
-  display: none;                /* 預設隱藏，只有網頁版顯示 */
-  position: sticky; top: 0; z-index: 5;
+  position: sticky;
+  top: 0;
+  z-index: 100;                /* 提高層級，避免被內容覆蓋 */
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* 左右兩側 */
+  gap: 12px;
   padding: 10px 12px;
-  margin: -8px -8px 12px;       /* 視你的容器內距調整 */
+  margin: 0 0 12px;            /* 🔁 去掉原本的負邊距 */
   border-bottom: 1px solid var(--border, #262b36);
   background: var(--ks-bg-elev, rgba(0,0,0,.35));
   backdrop-filter: saturate(120%) blur(8px);
-  display: flex; gap: 8px; align-items: center; justify-content: flex-end;
+}
+
+/* 左側品牌區 */
+.web-actions .brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.web-actions .brand .logo {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+.web-actions .brand-text {
+  font-weight: 600;
+  color: var(--text, #e7ecf3);
+}
+
+/* 右側按鈕/選單沿用你的按鈕樣式 */
+.web-actions .actions {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
   flex-wrap: wrap;
 }
-.web-actions .btn {
-  padding: 6px 12px; border: 1px solid var(--border, #262b36);
-  border-radius: 10px; cursor: pointer;
-  background: var(--card, #171a21); color: var(--text, #e7ecf3);
+.web-actions .btn,
+.web-actions .select {
+  padding: 6px 10px;
+  border: 1px solid var(--border,#262b36);
+  border-radius: 10px;
+  background: var(--card,#171a21);
+  color: var(--text,#e7ecf3);
 }
 .web-actions .btn:hover { filter: brightness(1.08); }
-.web-actions .lang {
-  display: inline-flex; gap: 6px; align-items: center;
-}
-.is-web .web-actions { display: flex; }
 
-.web-actions .select{
-  padding:6px 10px; border:1px solid var(--border,#262b36);
-  border-radius:10px; background:var(--card,#171a21); color:var(--text,#e7ecf3);
-}
 
 
 
@@ -231,3 +253,4 @@ summary{
 }
 .file-actions .linkbtn:hover { filter: brightness(1.08); }
 	
+
