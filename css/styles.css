@@ -5,19 +5,16 @@
 .web-actions {
   position: sticky;
   top: 0;
-  z-index: 100;                /* 提高層級，避免被內容覆蓋 */
+  z-index: 100;
   display: flex;
   align-items: center;
-  justify-content: space-between; /* 左右兩側 */
-  gap: 12px;
+  justify-content: space-between; /* 左右分開 */
   padding: 10px 12px;
-  margin: 0 0 12px;            /* 🔁 去掉原本的負邊距 */
   border-bottom: 1px solid var(--border, #262b36);
   background: var(--ks-bg-elev, rgba(0,0,0,.35));
   backdrop-filter: saturate(120%) blur(8px);
 }
 
-/* 左側品牌區 */
 .web-actions .brand {
   display: flex;
   align-items: center;
@@ -26,29 +23,18 @@
 .web-actions .brand .logo {
   width: 24px;
   height: 24px;
-  display: block;
 }
 .web-actions .brand-text {
   font-weight: 600;
   color: var(--text, #e7ecf3);
 }
 
-/* 右側按鈕/選單沿用你的按鈕樣式 */
 .web-actions .actions {
   display: inline-flex;
   gap: 8px;
   align-items: center;
-  flex-wrap: wrap;
 }
-.web-actions .btn,
-.web-actions .select {
-  padding: 6px 10px;
-  border: 1px solid var(--border,#262b36);
-  border-radius: 10px;
-  background: var(--card,#171a21);
-  color: var(--text,#e7ecf3);
-}
-.web-actions .btn:hover { filter: brightness(1.08); }
+
 
 
 
@@ -253,4 +239,5 @@ summary{
 }
 .file-actions .linkbtn:hover { filter: brightness(1.08); }
 	
+
 
