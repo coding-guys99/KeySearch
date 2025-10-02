@@ -115,7 +115,7 @@
 "type.project": "مشروع",
 "type.knowledge": "معرفة",
 "type.admin": "إدارة",
-"type.resource": "مورد"
+"type.resource": "مورد",
 
 
   "filters.identity": "الهوية",
@@ -157,6 +157,7 @@
   
   "foot.note": "Local-first • IndexedDB • لا حاجة للخادم"
 }
+
 
 
 
