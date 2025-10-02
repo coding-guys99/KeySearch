@@ -103,15 +103,13 @@
   "card.copyPath": "Copy Path",
   "card.copied": "Copied!",
   "card.copyFailed": "Copy failed. Please try again.",
-  "card.openFile": "Open File",
-  "card.openLink": "Open Link",
   "card.cannotOpenWeb": "Browsers can’t open local files. Click to copy the path.",
   "card.noLink": "No link set",
   "card.openFailed": "Open failed.",
   "card.desktopOnly": "This action is available in the desktop app.",
   "hint.exampleCard": "This is an example card",
   "meta.updated": "Updated",
-  "stats.examples": "{n} examples"，
+  "stats.examples": "{n} examples",
   "identity.company": "Company",
   "identity.personal": "Personal",
   "type.project": "Project",
@@ -158,6 +156,7 @@
   "foot.note": "Local-first • IndexedDB • No server required"
 
 }
+
 
 
 
