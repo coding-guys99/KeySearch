@@ -100,11 +100,18 @@
   "btn.edit": "Edit",
   "card.openFile": "Open File",
   "card.openLink": "Open Link",
-  "card.copyPath": "Copy path",
+  "card.copyPath": "Copy Path",
   "card.copied": "Copied!",
-  "card.copyFail": "Copy failed. Please copy manually:",
-  "card.whyBlocked": "Why can’t open?",
-  "card.fileBlockedMsg": "Browsers block opening file:// links from websites for security. Use the desktop app, or copy the path and open it in your file manager.",
+  "card.copyFailed": "Copy failed. Please try again.",
+  "card.openFile": "Open File",
+  "card.openLink": "Open Link",
+  "card.cannotOpenWeb": "Browsers can’t open local files. Click to copy the path.",
+  "card.noLink": "No link set",
+  "card.openFailed": "Open failed.",
+  "card.desktopOnly": "This action is available in the desktop app.",
+  "hint.exampleCard": "This is an example card",
+  "meta.updated": "Updated",
+  "stats.examples": "{n} examples"，
   "identity.company": "Company",
   "identity.personal": "Personal",
   "type.project": "Project",
@@ -151,6 +158,7 @@
   "foot.note": "Local-first • IndexedDB • No server required"
 
 }
+
 
 
 
