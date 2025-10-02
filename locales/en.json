@@ -100,6 +100,11 @@
   "btn.edit": "Edit",
   "card.openFile": "Open File",
   "card.openLink": "Open Link",
+  "card.copyPath": "Copy path",
+  "card.copied": "Copied!",
+  "card.copyFail": "Copy failed. Please copy manually:",
+  "card.whyBlocked": "Why can’t open?",
+  "card.fileBlockedMsg": "Browsers block opening file:// links from websites for security. Use the desktop app, or copy the path and open it in your file manager.",
   "identity.company": "Company",
   "identity.personal": "Personal",
   "type.project": "Project",
@@ -146,6 +151,7 @@
   "foot.note": "Local-first • IndexedDB • No server required"
 
 }
+
 
 
 
