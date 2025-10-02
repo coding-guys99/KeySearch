@@ -115,7 +115,7 @@
 "type.project": "Proyek",
 "type.knowledge": "Pengetahuan",
 "type.admin": "Admin",
-"type.resource": "Sumber daya"
+"type.resource": "Sumber daya",
 
 
 
@@ -158,6 +158,7 @@
   
   "foot.note": "Local-first • IndexedDB • Tidak perlu server"
 }
+
 
 
 
