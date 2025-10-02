@@ -93,19 +93,30 @@
   "about.desc": "Gerenciador de Conhecimento Leve",
   "about.version": "Versão",
 
-  "demo.quickstart.title": "👋 Bem-vindo — Início Rápido",
-"demo.quickstart.content": "• Adicione / edite cartões no painel esquerdo\n• Use tags (ex.: invoice, design) para facilitar a busca\n• Links suportam http(s) e caminhos do Windows\n• Exporte CSV na web → Importe JSON no desktop",
-"demo.project.title": "Exemplo de Projeto: Reformulação de Site",
-"demo.project.content": "Objetivo: Atualizar página hero + preços\nTarefas:\n- Revisar textos\n- Novas direções visuais (Figma)\n- Teste A/B de layouts de preços",
-  "btn.edit": "Editar",
-"card.openFile": "Abrir Arquivo",
-"card.openLink": "Abrir Link",
+  "demo.quickstart.title": "👋 Bem-vindo — Início rápido",
+"demo.quickstart.content": "• Adicione / edite cartões no painel esquerdo\n• Use etiquetas (ex: invoice, design) para facilitar a pesquisa...",
+"demo.project.title": "Exemplo de projeto: Reformulação do site",
+"demo.project.content": "Objetivo: Atualizar o herói do site de marketing e a página de preços\nTarefas:\n- Revisar o conteúdo atual...",
+"btn.edit": "Editar",
+"card.openFile": "Abrir arquivo",
+"card.openLink": "Abrir link",
+"card.copyPath": "Copiar caminho",
+"card.copied": "Copiado!",
+"card.copyFailed": "Falha ao copiar. Tente novamente.",
+"card.cannotOpenWeb": "Os navegadores não podem abrir arquivos locais. Clique para copiar o caminho.",
+"card.noLink": "Nenhum link definido",
+"card.openFailed": "Falha ao abrir.",
+"card.desktopOnly": "Esta ação está disponível apenas no aplicativo de desktop.",
+"hint.exampleCard": "Este é um cartão de exemplo",
+"meta.updated": "Atualizado",
+"stats.examples": "{n} exemplos",
 "identity.company": "Empresa",
 "identity.personal": "Pessoal",
 "type.project": "Projeto",
 "type.knowledge": "Conhecimento",
-"type.admin": "Admin",
-"type.resource": "Recurso",
+"type.admin": "Administração",
+"type.resource": "Recurso"
+
 
 
   "filters.identity": "Identidade",
@@ -147,6 +158,7 @@
   
   "foot.note": "Local-first • IndexedDB • Nenhum servidor necessário"
 }
+
 
 
 
