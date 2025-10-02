@@ -542,7 +542,9 @@
   const LANG_ALIAS = {
     en:   'en',
     cn:   'cn',
-    tw:   'tw',
+    tw:   'tw'
+	  };
+	  /*
     bm:   'ms',
     viet: 'viet',
     ko:   'ko',
@@ -556,8 +558,8 @@
     ru:   'ru',
     sa:   'ar',
     in:   'hi',
-    mn:   'mn'
-  };
+    mn:   'mn'===*/
+  
 
   function getPrefs() {
     try { return JSON.parse(localStorage.getItem('ks.prefs') || '{}'); }
@@ -644,6 +646,7 @@ setTimeout(() => {
 </body>
 
 </html>
+
 
 
 
