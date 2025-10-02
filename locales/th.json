@@ -115,7 +115,7 @@
 "type.project": "โปรเจกต์",
 "type.knowledge": "ความรู้",
 "type.admin": "ผู้ดูแลระบบ",
-"type.resource": "ทรัพยากร"
+"type.resource": "ทรัพยากร",
 
 
   "filters.identity": "เอกลักษณ์",
@@ -157,6 +157,7 @@
   
   "foot.note": "Local-first • IndexedDB • ไม่ต้องใช้เซิร์ฟเวอร์"
 }
+
 
 
 
