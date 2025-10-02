@@ -94,18 +94,29 @@
   "about.version": "Version",
 
   "demo.quickstart.title": "👋 Bienvenue — Démarrage rapide",
-"demo.quickstart.content": "• Ajouter / modifier des cartes dans le panneau de gauche\n• Utilisez des tags (ex. : invoice, design) pour faciliter la recherche\n• Les liens prennent en charge http(s) et les chemins Windows\n• Exporter CSV sur le web → Importer JSON sur le bureau",
+"demo.quickstart.content": "• Ajouter / modifier des cartes dans le panneau de gauche\n• Utilisez des étiquettes (ex: invoice, design) pour faciliter la recherche...",
 "demo.project.title": "Exemple de projet : Refonte du site web",
-"demo.project.content": "Objectif : Rafraîchir la page hero + tarification\nTâches :\n- Vérifier le texte\n- Nouvelles directions visuelles (Figma)\n- Test A/B des mises en page de prix",
-  "btn.edit": "Modifier",
+"demo.project.content": "Objectif : Actualiser le héros du site marketing et la page des prix\nTâches :\n- Vérifier le contenu actuel...",
+"btn.edit": "Modifier",
 "card.openFile": "Ouvrir le fichier",
 "card.openLink": "Ouvrir le lien",
+"card.copyPath": "Copier le chemin",
+"card.copied": "Copié !",
+"card.copyFailed": "Échec de la copie. Veuillez réessayer.",
+"card.cannotOpenWeb": "Les navigateurs ne peuvent pas ouvrir les fichiers locaux. Cliquez pour copier le chemin.",
+"card.noLink": "Aucun lien défini",
+"card.openFailed": "Échec de l’ouverture.",
+"card.desktopOnly": "Cette action est disponible uniquement dans l’application de bureau.",
+"hint.exampleCard": "Ceci est une carte d’exemple",
+"meta.updated": "Mis à jour",
+"stats.examples": "{n} exemples",
 "identity.company": "Entreprise",
 "identity.personal": "Personnel",
 "type.project": "Projet",
 "type.knowledge": "Connaissance",
 "type.admin": "Admin",
-"type.resource": "Ressource",
+"type.resource": "Ressource"
+
 
   "filters.identity": "Identité",
   "filters.all": "Tout",
@@ -146,6 +157,7 @@
   
   "foot.note": "Local-first • IndexedDB • Aucun serveur requis"
 }
+
 
 
 
