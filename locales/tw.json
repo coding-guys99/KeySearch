@@ -115,7 +115,7 @@
 "type.project": "專案",
 "type.knowledge": "知識",
 "type.admin": "管理",
-"type.resource": "資源"
+"type.resource": "資源",
 
 
   "filters.identity": "身份",
@@ -157,6 +157,7 @@
   
   "foot.note": "本地優先 • IndexedDB • 不需伺服器"
 }
+
 
 
 
