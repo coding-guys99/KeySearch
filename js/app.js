@@ -208,6 +208,46 @@ function render() {
   }
 }
 
+// 只需綁一次，建議放在 bindEvents() 末尾；若放 render() 記得先移除再綁
+if (!window.__KS_LINK_HANDLER_BOUND__) {
+  window.__KS_LINK_HANDLER_BOUND__ = true;
+  els.cards?.addEventListener('click', async (e) => {
+    const btn = e.target.closest('.link-btn');
+    if (!btn) return;
+
+    const act = btn.dataset.act;
+    const url = btn.dataset.url || '';
+
+    if (act === 'copy-path') {
+      // 複製 file 路徑（保留原樣或去掉 file:// 皆可）
+      try {
+        await navigator.clipboard.writeText(url);
+        // 小回饋
+        const old = btn.textContent;
+        btn.textContent = t('card.copied','Copied!');
+        btn.disabled = true;
+        setTimeout(() => {
+          btn.textContent = t('card.copyPath','Copy Path');
+          btn.disabled = false;
+        }, 900);
+      } catch (err) {
+        alert(t('card.copyFailed','Copy failed. Please try again.'));
+      }
+    }
+
+    if (act === 'open-file') {
+      // 只在桌面版有用
+      if (window.electronAPI?.openPath) {
+        try { await window.electronAPI.openPath(url); }
+        catch (err) { alert(t('card.openFailed','Open failed.')); }
+      } else {
+        alert(t('card.desktopOnly','This action is available in the desktop app.'));
+      }
+    }
+  });
+}
+
+
 function isWeb() {
   return document.documentElement.classList.contains('is-web');
 }
