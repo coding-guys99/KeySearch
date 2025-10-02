@@ -94,18 +94,29 @@
   "about.version": "Versión",
 
   "demo.quickstart.title": "👋 Bienvenido — Inicio rápido",
-"demo.quickstart.content": "• Agregar / editar tarjetas en el panel izquierdo\n• Usa etiquetas (ej.: invoice, design) para facilitar la búsqueda\n• Los enlaces admiten http(s) y rutas de Windows\n• Exportar CSV en la web → Importar JSON en el escritorio",
-"demo.project.title": "Ejemplo de proyecto: Renovación del sitio web",
-"demo.project.content": "Meta: Actualizar página hero + precios\nTareas:\n- Revisar copys\n- Nuevas direcciones visuales (Figma)\n- Prueba A/B de diseños de precios",
-  "btn.edit": "Editar",
+"demo.quickstart.content": "• Añade / edita tarjetas en el panel izquierdo\n• Usa etiquetas (ej: invoice, design) para facilitar la búsqueda...",
+"demo.project.title": "Ejemplo de proyecto: Rediseño del sitio web",
+"demo.project.content": "Objetivo: Actualizar el héroe del sitio de marketing y la página de precios\nTareas:\n- Revisar el contenido actual...",
+"btn.edit": "Editar",
 "card.openFile": "Abrir archivo",
 "card.openLink": "Abrir enlace",
+"card.copyPath": "Copiar ruta",
+"card.copied": "¡Copiado!",
+"card.copyFailed": "Error al copiar. Inténtalo de nuevo.",
+"card.cannotOpenWeb": "Los navegadores no pueden abrir archivos locales. Haz clic para copiar la ruta.",
+"card.noLink": "No se ha establecido un enlace",
+"card.openFailed": "Error al abrir.",
+"card.desktopOnly": "Esta acción solo está disponible en la aplicación de escritorio.",
+"hint.exampleCard": "Esta es una tarjeta de ejemplo",
+"meta.updated": "Actualizado",
+"stats.examples": "{n} ejemplos",
 "identity.company": "Empresa",
 "identity.personal": "Personal",
 "type.project": "Proyecto",
 "type.knowledge": "Conocimiento",
-"type.admin": "Admin",
-"type.resource": "Recurso",
+"type.admin": "Administración",
+"type.resource": "Recurso"
+
 
   "filters.identity": "Identidad",
   "filters.all": "Todo",
@@ -146,6 +157,7 @@
   
   "foot.note": "Local-first • IndexedDB • No requiere servidor"
 }
+
 
 
 
