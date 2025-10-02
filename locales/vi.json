@@ -94,18 +94,29 @@
   "about.version": "Phiên bản",
 
   "demo.quickstart.title": "👋 Chào mừng — Bắt đầu nhanh",
-"demo.quickstart.content": "• Thêm / chỉnh sửa thẻ ở bảng bên trái\n• Dùng thẻ (ví dụ: invoice, design) để tìm kiếm dễ hơn\n• Liên kết hỗ trợ http(s) và đường dẫn Windows\n• Xuất CSV trên web → Nhập JSON trên desktop",
-"demo.project.title": "Ví dụ dự án: Cải tạo website",
-"demo.project.content": "Mục tiêu: Làm mới hero + trang giá\nNhiệm vụ:\n- Kiểm tra nội dung\n- Hướng thiết kế mới (Figma)\n- A/B test bố cục giá",
-  "btn.edit": "Chỉnh sửa",
+"demo.quickstart.content": "• Thêm / chỉnh sửa thẻ trong bảng bên trái\n• Sử dụng thẻ (ví dụ: invoice, design) để tìm kiếm dễ dàng hơn...",
+"demo.project.title": "Ví dụ dự án: Tái thiết kế website",
+"demo.project.content": "Mục tiêu: Làm mới trang marketing và trang giá\nNhiệm vụ:\n- Kiểm tra nội dung hiện tại...",
+"btn.edit": "Chỉnh sửa",
 "card.openFile": "Mở tệp",
 "card.openLink": "Mở liên kết",
+"card.copyPath": "Sao chép đường dẫn",
+"card.copied": "Đã sao chép!",
+"card.copyFailed": "Sao chép thất bại. Vui lòng thử lại.",
+"card.cannotOpenWeb": "Trình duyệt không thể mở tệp cục bộ. Nhấp để sao chép đường dẫn.",
+"card.noLink": "Chưa thiết lập liên kết",
+"card.openFailed": "Mở thất bại.",
+"card.desktopOnly": "Hành động này chỉ khả dụng trong ứng dụng máy tính.",
+"hint.exampleCard": "Đây là một thẻ ví dụ",
+"meta.updated": "Đã cập nhật",
+"stats.examples": "{n} ví dụ",
 "identity.company": "Công ty",
 "identity.personal": "Cá nhân",
 "type.project": "Dự án",
 "type.knowledge": "Kiến thức",
 "type.admin": "Quản trị",
-"type.resource": "Tài nguyên",
+"type.resource": "Tài nguyên"
+
 
   "filters.identity": "Danh tính",
   "filters.all": "Tất cả",
@@ -146,6 +157,7 @@
   
   "foot.note": "Local-first • IndexedDB • Không cần máy chủ"
 }
+
 
 
 
