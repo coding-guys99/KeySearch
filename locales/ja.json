@@ -94,16 +94,26 @@
   "about.version": "バージョン",
 
   "demo.quickstart.title": "👋 ようこそ — クイックスタート",
-"demo.quickstart.content": "• 左パネルでカードを追加/編集\n• タグ（例: invoice、design）で検索を簡単に\n• リンクは http(s) と Windows パスをサポート\n• WebでCSVをエクスポート → デスクトップでJSONをインポート",
+"demo.quickstart.content": "• 左パネルでカードを追加 / 編集\n• タグ（例: invoice, design）を使って検索を簡単に...",
 "demo.project.title": "プロジェクト例：ウェブサイト改修",
-"demo.project.content": "目標：ヒーロー + 料金ページを刷新\nタスク：\n- コピーを監査\n- 新しいビジュアル方向性（Figma）\n- 料金レイアウトのA/Bテスト",
-  "btn.edit": "編集",
+"demo.project.content": "目標：マーケティングサイトのヒーローと価格ページを刷新\nタスク：\n- 現在のコピーを確認...",
+"btn.edit": "編集",
 "card.openFile": "ファイルを開く",
 "card.openLink": "リンクを開く",
+"card.copyPath": "パスをコピー",
+"card.copied": "コピーしました！",
+"card.copyFailed": "コピーに失敗しました。もう一度お試しください。",
+"card.cannotOpenWeb": "ブラウザではローカルファイルを開けません。クリックしてパスをコピーしてください。",
+"card.noLink": "リンクが設定されていません",
+"card.openFailed": "開けませんでした。",
+"card.desktopOnly": "この操作はデスクトップアプリでのみ利用できます。",
+"hint.exampleCard": "これはサンプルカードです",
+"meta.updated": "更新済み",
+"stats.examples": "{n} 件のサンプル",
 "identity.company": "会社",
 "identity.personal": "個人",
 "type.project": "プロジェクト",
-"type.knowledge": "ナレッジ",
+"type.knowledge": "知識",
 "type.admin": "管理",
 "type.resource": "リソース",
 
@@ -146,6 +156,7 @@
   
   "foot.note": "ローカル優先 • IndexedDB • サーバー不要"
 }
+
 
 
 
