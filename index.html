@@ -656,10 +656,198 @@ setTimeout(() => {
 }, 1000);
 </script>
 
+	<!-- ===== Guided Tour (vanilla) ===== -->
+<style>
+  .ks-tour-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.45);
+    z-index: 2000;
+    pointer-events: none; /* 讓使用者點不到背景 */
+  }
+  .ks-tour-box {
+    position: fixed;
+    z-index: 2001;
+    pointer-events: none;
+    outline: 3px dashed rgba(255,255,255,.9);
+    border-radius: 12px;
+    box-shadow: 0 0 0 9999px rgba(0,0,0,.45); /* 反向遮罩效果 */
+  }
+  .ks-tour-tip {
+    position: fixed;
+    z-index: 2002;
+    pointer-events: auto;
+    max-width: 360px;
+    background: var(--card, #171a21);
+    color: var(--text, #e7ecf3);
+    border: 1px solid var(--border, #262b36);
+    border-radius: 12px;
+    padding: 12px 14px;
+    box-shadow: 0 8px 30px rgba(0,0,0,.35);
+  }
+  .ks-tour-tip h4 { margin: 0 0 6px; font-size: 16px; }
+  .ks-tour-tip p  { margin: 0 0 10px; opacity: .9; line-height: 1.45; }
+  .ks-tour-actions { display:flex; gap:8px; justify-content:flex-end; }
+  .ks-tour-actions .btn {
+    padding: 6px 10px; border: 1px solid var(--border, #262b36);
+    background: var(--card, #171a21); color: var(--text,#e7ecf3);
+    border-radius: 10px; cursor: pointer;
+  }
+  .ks-tour-actions .btn.primary { background: #3a7afe; border-color: #3a7afe; color: #fff; }
+  .ks-tour-lamp {
+    position: fixed; left: 12px; top: 10px; z-index: 1500;
+    background: var(--card,#171a21); color: var(--text,#e7ecf3);
+    border: 1px solid var(--border,#262b36); border-radius: 999px;
+    width: 36px; height: 36px; display:flex; align-items:center; justify-content:center;
+    cursor: pointer;
+  }
+</style>
+
+<!-- 你想要的「燈泡」按鈕（左上角） -->
+<button class="ks-tour-lamp" id="ks-tour-lamp" title="快速導覽" aria-label="Quick Tour">💡</button>
+
+<script>
+(function(){
+  const t = (k, fb) => (window.i18n?.t ? window.i18n.t(k) : fb || k);
+
+  // 你可以自由調整步驟與 selector
+  const STEPS = [
+    {
+      el: '.web-actions',                 // 頂部工具列（網頁版）
+      title: t('tour.webActions.title', '頂部工具列'),
+      text:  t('tour.webActions.text',  '在這裡可以匯出 CSV、設定語言。')
+    },
+    {
+      el: '#ks-search',                   // 搜尋框
+      title: t('tour.search.title', '搜尋'),
+      text:  t('tour.search.text',  '輸入標題、標籤或內文進行快速搜尋。')
+    },
+    {
+      el: '.filters',                     // 篩選列
+      title: t('tour.filters.title', '篩選'),
+      text:  t('tour.filters.text',  '用身份、類型、標籤與排序，縮小清單範圍。')
+    },
+    {
+      el: '#item-form',                   // 表單（新增/編輯）
+      title: t('tour.form.title', '新增 / 編輯'),
+      text:  t('tour.form.text',  '在這裡新增或編輯卡片，支援多個連結與標籤。')
+    },
+    {
+      el: '#cards',                       // 卡片列表
+      title: t('tour.cards.title', '卡片列表'),
+      text:  t('tour.cards.text',  '點「Edit」可快速載入到表單。連結可直接開啟或複製。')
+    }
+  ];
+
+  // 建立節點
+  function createEl(cls){ const el = document.createElement('div'); el.className = cls; return el; }
+  const overlay = createEl('ks-tour-overlay'); overlay.style.display='none';
+  const box     = createEl('ks-tour-box');     box.style.display='none';
+  const tip     = createEl('ks-tour-tip');     tip.style.display='none';
+  document.body.append(overlay, box, tip);
+
+  let idx = 0;
+  function clamp(v,min,max){ return Math.max(min, Math.min(max,v)); }
+
+  function placeFor(target){
+    const r = target.getBoundingClientRect();
+    const pad = 8;
+    // 高亮框位置
+    box.style.left   = (r.left - pad) + 'px';
+    box.style.top    = (r.top  - pad) + 'px';
+    box.style.width  = (r.width  + pad*2) + 'px';
+    box.style.height = (r.height + pad*2) + 'px';
+
+    // 提示卡預設放在元素下方
+    const tipW = 360, tipPad = 10;
+    let left = clamp(r.left, 10, window.innerWidth - tipW - 10);
+    let top  = r.bottom + 12;
+    // 若下方放不下，改放上方
+    if (top + 160 > window.innerHeight) top = r.top - 12 - 160;
+    tip.style.left = left + 'px';
+    tip.style.top  = clamp(top, 10, window.innerHeight - 170) + 'px';
+  }
+
+  function renderStep(){
+    const step = STEPS[idx];
+    const target = document.querySelector(step.el);
+    if (!target) { next(); return; }
+
+    tip.innerHTML = `
+      <h4>${step.title}</h4>
+      <p>${step.text}</p>
+      <div class="ks-tour-actions">
+        <button class="btn" data-act="prev">${t('tour.prev','上一步')}</button>
+        <button class="btn" data-act="skip">${t('tour.skip','跳過')}</button>
+        <button class="btn primary" data-act="next">${t('tour.next','下一步')}</button>
+      </div>
+    `;
+
+    overlay.style.display = 'block';
+    box.style.display     = 'block';
+    tip.style.display     = 'block';
+    placeFor(target);
+  }
+
+  function end(){
+    overlay.style.display='none';
+    box.style.display='none';
+    tip.style.display='none';
+    window.removeEventListener('resize', onRelayout);
+    window.removeEventListener('scroll', onRelayout, { passive: true });
+  }
+
+  function next(){
+    idx++;
+    if (idx >= STEPS.length) return end();
+    renderStep();
+  }
+  function prev(){
+    idx = Math.max(0, idx-1);
+    renderStep();
+  }
+  function onRelayout(){
+    const step = STEPS[idx];
+    const target = document.querySelector(step.el);
+    if (target) placeFor(target);
+  }
+
+  // 對外 API
+  window.Tour = {
+    start(startIndex=0){
+      idx = clamp(startIndex, 0, STEPS.length-1);
+      renderStep();
+      window.addEventListener('resize', onRelayout);
+      window.addEventListener('scroll', onRelayout, { passive: true });
+    },
+    end
+  };
+
+  // 事件委派（tip 裡的按鈕）
+  tip.addEventListener('click', (e)=>{
+    const act = e.target.closest('button')?.dataset.act;
+    if (!act) return;
+    if (act==='next') return next();
+    if (act==='prev') return prev();
+    if (act==='skip') return end();
+  });
+
+  // 點遮罩不關閉（避免誤觸）
+  overlay.addEventListener('click', (e)=> e.stopPropagation());
+  box.addEventListener('click', (e)=> e.stopPropagation());
+
+  // 燈泡按鈕觸發
+  document.getElementById('ks-tour-lamp')?.addEventListener('click', ()=>{
+    window.Tour.start(0);
+  });
+})();
+</script>
+
+
 
 </body>
 
 </html>
+
 
 
 
