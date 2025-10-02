@@ -93,6 +93,31 @@
   "about.desc": "輕量級知識管理工具",
   "about.version": "版本",
 
+  "demo.quickstart.title": "👋 歡迎 — 快速開始",
+"demo.quickstart.content": "• 在左側面板新增 / 編輯卡片\n• 使用標籤（例如：invoice, design）讓搜尋更方便...",
+"demo.project.title": "專案範例：網站改版",
+"demo.project.content": "目標：更新行銷網站的主視覺與價格頁\n任務：\n- 檢視目前文案...",
+"btn.edit": "編輯",
+"card.openFile": "開啟檔案",
+"card.openLink": "開啟連結",
+"card.copyPath": "複製路徑",
+"card.copied": "已複製！",
+"card.copyFailed": "複製失敗，請再試一次。",
+"card.cannotOpenWeb": "瀏覽器無法開啟本機檔案。點擊以複製路徑。",
+"card.noLink": "尚未設定連結",
+"card.openFailed": "開啟失敗。",
+"card.desktopOnly": "此動作僅適用於桌面版應用程式。",
+"hint.exampleCard": "這是一張範例卡片",
+"meta.updated": "已更新",
+"stats.examples": "{n} 個範例",
+"identity.company": "公司",
+"identity.personal": "個人",
+"type.project": "專案",
+"type.knowledge": "知識",
+"type.admin": "管理",
+"type.resource": "資源",
+
+
   "filters.identity": "身份",
   "filters.all": "全部",
   "filters.company": "公司",
@@ -132,3 +157,4 @@
   
   "foot.note": "本地優先 • IndexedDB • 不需伺服器"
 }
+
