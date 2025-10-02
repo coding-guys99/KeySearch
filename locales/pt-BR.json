@@ -115,7 +115,7 @@
 "type.project": "Projeto",
 "type.knowledge": "Conhecimento",
 "type.admin": "Administração",
-"type.resource": "Recurso"
+"type.resource": "Recurso",
 
 
 
@@ -158,6 +158,7 @@
   
   "foot.note": "Local-first • IndexedDB • Nenhum servidor necessário"
 }
+
 
 
 
