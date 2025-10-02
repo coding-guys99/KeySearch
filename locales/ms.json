@@ -93,19 +93,30 @@
   "about.desc": "Pengurus Pengetahuan Ringan",
   "about.version": "Versi",
 
-  "demo.quickstart.title": "👋 Selamat datang — Mula Pantas",
-"demo.quickstart.content": "• Tambah / edit kad di panel kiri\n• Guna tag (cth: invoice, design) untuk carian lebih mudah\n• Pautan sokong http(s) dan laluan Windows\n• Eksport CSV di web → Import JSON di desktop",
+  "demo.quickstart.title": "👋 Selamat Datang — Mula Cepat",
+"demo.quickstart.content": "• Tambah / edit kad di panel kiri\n• Gunakan tag (cth: invoice, design) untuk carian yang lebih mudah...",
 "demo.project.title": "Contoh Projek: Penambahbaikan Laman Web",
-"demo.project.content": "Matlamat: Segarkan hero + halaman harga\nTugas:\n- Audit salinan\n- Arah visual baharu (Figma)\n- Ujian A/B susun atur harga",
-  "btn.edit": "Edit",
+"demo.project.content": "Matlamat: Segarkan laman pemasaran dan halaman harga\nTugas:\n- Semak salinan semasa...",
+"btn.edit": "Edit",
 "card.openFile": "Buka Fail",
 "card.openLink": "Buka Pautan",
+"card.copyPath": "Salin Laluan",
+"card.copied": "Disalin!",
+"card.copyFailed": "Salinan gagal. Sila cuba lagi.",
+"card.cannotOpenWeb": "Pelayar tidak dapat membuka fail tempatan. Klik untuk salin laluan.",
+"card.noLink": "Tiada pautan ditetapkan",
+"card.openFailed": "Gagal dibuka.",
+"card.desktopOnly": "Tindakan ini hanya tersedia dalam aplikasi desktop.",
+"hint.exampleCard": "Ini adalah kad contoh",
+"meta.updated": "Dikemas kini",
+"stats.examples": "{n} contoh",
 "identity.company": "Syarikat",
 "identity.personal": "Peribadi",
 "type.project": "Projek",
 "type.knowledge": "Pengetahuan",
 "type.admin": "Admin",
-"type.resource": "Sumber",
+"type.resource": "Sumber"
+
 
   "filters.identity": "Identiti",
   "filters.all": "Semua",
@@ -146,6 +157,7 @@
   
   "foot.note": "Local-first • IndexedDB • Tiada server diperlukan"
 }
+
 
 
 
