@@ -97,6 +97,34 @@ function bindEvents() {
   console.debug('[KS] bindEvents:', !!els.form, !!els.btnSave, !!els.title, !!els.identity, !!els.type);
 }
 
+// 在 bindEvents() 末尾加：
+els.cards?.addEventListener('click', async (e) => {
+  const btn = e.target.closest('.file-actions .linkbtn');
+  if (!btn) return;
+
+  const act = btn.dataset.act;
+  const url = btn.dataset.url;
+
+  if (act === 'copy' && url) {
+    try {
+      await navigator.clipboard.writeText(url);
+      const orig = btn.textContent;
+      btn.textContent = (window.i18n?.t('card.copied') || 'Copied!');
+      setTimeout(() => { btn.textContent = orig; }, 1200);
+    } catch {
+      alert((window.i18n?.t('card.copyFail') || 'Copy failed. Please copy manually:\n') + url);
+    }
+  }
+
+  if (act === 'why') {
+    alert(
+      window.i18n?.t('card.fileBlockedMsg')
+      || 'Browsers block opening file:// links from websites for security.\nUse the desktop app, or copy the path and open it in your file manager.'
+    );
+  }
+});
+
+
 /* ======================= 渲染 ======================= */
 function readFilters(){
   return {
