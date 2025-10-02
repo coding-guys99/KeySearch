@@ -94,12 +94,22 @@
   "about.version": "버전",
 
   "demo.quickstart.title": "👋 환영합니다 — 빠른 시작",
-"demo.quickstart.content": "• 왼쪽 패널에서 카드 추가/편집\n• 태그 사용 (예: invoice, design) → 검색 용이\n• 링크는 http(s) 및 Windows 경로 지원\n• 웹에서 CSV 내보내기 → 데스크톱에서 JSON 가져오기",
+"demo.quickstart.content": "• 왼쪽 패널에서 카드 추가 / 편집\n• 태그 사용 (예: invoice, design) 으로 검색을 더 쉽게...",
 "demo.project.title": "프로젝트 예시: 웹사이트 리뉴얼",
-"demo.project.content": "목표: 메인 비주얼 + 가격 페이지 새로고침\n작업:\n- 카피 검토\n- 새로운 비주얼 방향(Figma)\n- 가격 레이아웃 A/B 테스트",
-  "btn.edit": "편집",
+"demo.project.content": "목표: 마케팅 사이트의 메인 영역과 가격 페이지 새단장\n작업:\n- 현재 카피 검토...",
+"btn.edit": "편집",
 "card.openFile": "파일 열기",
 "card.openLink": "링크 열기",
+"card.copyPath": "경로 복사",
+"card.copied": "복사됨!",
+"card.copyFailed": "복사 실패. 다시 시도하세요.",
+"card.cannotOpenWeb": "브라우저에서는 로컬 파일을 열 수 없습니다. 클릭하여 경로를 복사하세요.",
+"card.noLink": "링크가 설정되지 않음",
+"card.openFailed": "열기에 실패했습니다.",
+"card.desktopOnly": "이 동작은 데스크톱 앱에서만 가능합니다.",
+"hint.exampleCard": "이것은 예시 카드입니다",
+"meta.updated": "업데이트됨",
+"stats.examples": "{n} 개의 예시",
 "identity.company": "회사",
 "identity.personal": "개인",
 "type.project": "프로젝트",
@@ -146,6 +156,7 @@
   
   "foot.note": "Local-first • IndexedDB • 서버 불필요"
 }
+
 
 
 
