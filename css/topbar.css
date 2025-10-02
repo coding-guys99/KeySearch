@@ -252,4 +252,31 @@ body.ks-theme-light, #ks-topbar.ks-theme-light { /* 這個選擇器只是確保�
   font-weight:800; font-size:26px;
 }
 .about-body { text-align:center; line-height:1.6; }
+
 .about-body p { margin:6px 0; }
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--ks-bg-elev);
+}
+
+.topbar .brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.topbar .brand .logo {
+  width: 24px;
+  height: 24px;
+}
+
+.topbar .brand-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+}
