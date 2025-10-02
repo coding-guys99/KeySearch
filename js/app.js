@@ -206,6 +206,45 @@ function render() {
       });
     });
   }
+  // 只需綁一次，建議放在 bindEvents() 末尾；若放 render() 記得先移除再綁
+if (!window.__KS_LINK_HANDLER_BOUND__) {
+  window.__KS_LINK_HANDLER_BOUND__ = true;
+  els.cards?.addEventListener('click', async (e) => {
+    const btn = e.target.closest('.link-btn');
+    if (!btn) return;
+
+    const act = btn.dataset.act;
+    const url = btn.dataset.url || '';
+
+    if (act === 'copy-path') {
+      // 複製 file 路徑（保留原樣或去掉 file:// 皆可）
+      try {
+        await navigator.clipboard.writeText(url);
+        // 小回饋
+        const old = btn.textContent;
+        btn.textContent = t('card.copied','Copied!');
+        btn.disabled = true;
+        setTimeout(() => {
+          btn.textContent = t('card.copyPath','Copy Path');
+          btn.disabled = false;
+        }, 900);
+      } catch (err) {
+        alert(t('card.copyFailed','Copy failed. Please try again.'));
+      }
+    }
+
+    if (act === 'open-file') {
+      // 只在桌面版有用
+      if (window.electronAPI?.openPath) {
+        try { await window.electronAPI.openPath(url); }
+        catch (err) { alert(t('card.openFailed','Open failed.')); }
+      } else {
+        alert(t('card.desktopOnly','This action is available in the desktop app.'));
+      }
+    }
+  });
+}
+
 }
 
 function isWeb() {
@@ -218,23 +257,31 @@ function renderCard(it) {
   const tags = (it.tags||[]).map(tag => `<span class="badge">${escapeHtml(tag)}</span>`).join('');
 
   // ⬇️ 這段改過：web + file:// 顯示按鈕；其他維持 <a>
-  const links = (it.links||[]).map(u=>{
-    const isFile = u.startsWith('file:///');
-    if (isWeb() && isFile) {
+  const links = (it.links || []).map(u => {
+  if (u.startsWith('file:///')) {
+    if (IS_WEB) {
+      // Web：不能直接開啟，改成 Copy Path
       return `
-        <span class="file-actions">
-          <button class="linkbtn" data-act="copy" data-url="${escapeAttr(u)}">
-            ${t('card.copyPath','Copy path')}
-          </button>
-          <button class="linkbtn" data-act="why">
-            ${t('card.whyBlocked','Why can’t open?')}
-          </button>
-        </span>`;
+        <button class="link-btn"
+                data-act="copy-path"
+                data-url="${escapeAttr(u)}"
+                title="${t('card.cannotOpenWeb','Browsers can’t open local files. Click to copy the path.')}">
+          ${t('card.copyPath','Copy Path')}
+        </button>`;
     } else {
-      const label = isFile ? t('card.openFile','Open File') : t('card.openLink','Open Link');
-      return `<a href="${escapeAttr(u)}" target="_blank" rel="noopener">${label}</a>`;
+      // 桌面版（Electron）：真的開啟本機檔
+      return `
+        <button class="link-btn"
+                data-act="open-file"
+                data-url="${escapeAttr(u)}">
+          ${t('card.openFile','Open File')}
+        </button>`;
     }
-  }).join('');
+  }
+  // http/https：照舊是超連結
+  return `<a href="${escapeAttr(u)}" target="_blank" rel="noopener">${t('card.openLink','Open Link')}</a>`;
+}).join('');
+
 
   const snippet = (it.content||'').slice(0,220);
   const updated = it.updatedAt ? new Date(it.updatedAt).toLocaleString() : '';
