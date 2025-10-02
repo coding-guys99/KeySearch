@@ -358,27 +358,75 @@ async function saveBlobWithPicker(blob, suggestedName, typeSpec = { description:
   }
 }
 
+// 1) 綁定：一定要直接掛在「使用者點擊的按鈕」上
+// els.btnExportCsv?.addEventListener('click', onExportCSV);  // 這行保留
+
+// 2) 直接在 onExportCSV 裡，第一個 await 就是 showSaveFilePicker
 async function onExportCSV() {
-  const { q, identity, type, tag, sort } = readFilters();
-  let items = filterAndSearch(cache, { q, identity, type, tag });
-  items = sortItems(items, sort);
-
-  const csv = itemsToCSV(items);
-  const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8' });
-
-  const parts = ['keysearch'];
-  if (identity) parts.push(identity.toLowerCase());
-  if (type)     parts.push(type.toLowerCase());
-  if (q?.trim()) parts.push(q.trim().slice(0,24));
-  const suggested = parts.join('-') + '.csv';
-
   try {
-    await saveBlobWithPicker(blob, suggested, { description: 'CSV File', accept: { 'text/csv': ['.csv'] } });
+    const { q, identity, type, sort, tag } = readFilters();
+
+    // 先拿到檔案 handle（第一個 await → 維持使用者手勢）
+    const parts = ['keysearch'];
+    if (identity) parts.push(identity.toLowerCase());
+    if (type)     parts.push(type.toLowerCase());
+    if (q?.trim()) parts.push(q.trim().slice(0,24));
+    const suggested = parts.join('-') + '.csv';
+
+    let handle = null;
+    if ('showSaveFilePicker' in window) {
+      handle = await window.showSaveFilePicker({
+        suggestedName: suggested,
+        types: [{ description: 'CSV File', accept: { 'text/csv': ['.csv'] } }]
+      });
+    } else {
+      // 不支援 (Safari/iOS) → 走後備
+      return exportCsvFallback(suggested);
+    }
+
+    // 再產生資料（這些 await 放在後面就不影響 activation）
+    let items = filterAndSearch(cache, { q, identity, type, tag });
+    items = sortItems(items, sort);
+    const csv  = itemsToCSV(items);
+    const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8' });
+
+    const writable = await handle.createWritable();
+    await writable.write(blob);
+    await writable.close();
   } catch (err) {
+    // 使用者取消 → 靜默
+    if (err && (err.name === 'AbortError' || err.name === 'NotAllowedError')) return;
+
+    // 仍被判定沒有 activation → 改走後備下載
+    if (String(err?.message || '').includes('User activation is required')) {
+      return exportCsvFallback('keysearch-export.csv');
+    }
     console.error('[KS] save CSV failed:', err);
     alert('Save failed: ' + (err?.message || err));
   }
 }
+
+// 3) 後備方案：a[download] + 自訂檔名
+function exportCsvFallback(suggestedName = 'keysearch-export.csv') {
+  const { q, identity, type, tag, sort } = readFilters();
+  let items = filterAndSearch(cache, { q, identity, type, tag });
+  items = sortItems(items, sort);
+  const csv  = itemsToCSV(items);
+  const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8' });
+
+  let name = prompt('File name', suggestedName) || suggestedName;
+  if (!/\.csv$/i.test(name)) name += '.csv';
+
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
 
 async function onImport(e) {
   const file = e.target.files?.[0];
