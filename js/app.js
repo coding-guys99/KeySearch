@@ -59,8 +59,8 @@ let currentSort = 'updatedAt_desc';
 // 連續序號（從 1 開始；init 時會自動更新成最大值+1）
 let KS_SEQ = 1;
 
-// 建立時間格式：2025-10-02 Time:11:45am
-function formatCreatedAt(d = new Date()) {
+// 顯示用時間：2025-10-02 Time:11:45am
+function formatDisplayTime(d = new Date()) {
   const pad = n => String(n).padStart(2, '0');
   const yyyy = d.getFullYear();
   const mm = pad(d.getMonth() + 1);
@@ -68,7 +68,7 @@ function formatCreatedAt(d = new Date()) {
   let h = d.getHours();
   const m = pad(d.getMinutes());
   const ampm = h >= 12 ? 'pm' : 'am';
-  h = h % 12 || 12; // 0=>12
+  h = h % 12 || 12;
   return `${yyyy}-${mm}-${dd} Time:${h}:${m}${ampm}`;
 }
 
@@ -385,19 +385,19 @@ async function onSave(e) {
   const title = (els.title?.value || '').trim();
   if (!title) { alert('Title is required.'); return; }
 
-  // 🔢 ID：編輯就沿用；新增就用遞增序號
+  // 🔢 ID：編輯沿用；新增用遞增序號（需已定義全域 KS_SEQ）
   let id = els.id?.value;
   if (!id) id = String(KS_SEQ++);
 
-  // 🕒 時間：建立時間用自訂格式；更新時間仍保留 ISO（方便排序/顯示）
-  const nowISO = new Date().toISOString();
+  // 🕒 時間：建立時間維持你的自訂規則；「最後更新」改為你要的顯示樣式
+  const now = new Date();
+  const nowISO  = now.toISOString();          // 原始 ISO（排序/內部用）
+  const nowDisp = formatDisplayTime(now);     // 顯示用：YYYY-MM-DD Time:hh:mmam/pm
 
-  // 如果是「新增」，給自訂建立時間；如果是「編輯」，保留原建立時間
   const existing = cache.find(x => x.id === id);
-  const createdAt =
-    existing?.createdAt
-      ? existing.createdAt
-      : formatCreatedAt(new Date()); // ← 這裡即你要的格式：YYYY-MM-DD Time:hh:mmam
+  const createdAt = existing?.createdAt
+    ? existing.createdAt
+    : formatCreatedAt(new Date());            // 你原本的建立時間格式化函式
 
   const item = {
     id,
@@ -407,8 +407,9 @@ async function onSave(e) {
     tags: splitComma(els.tags?.value),
     links: normalizeLinksFromInput(els.links?.value),
     content: els.content?.value || '',
-    createdAt,          // ⬅️ 使用自訂建立時間
-    updatedAt: nowISO,  // ⬅️ 仍用 ISO，給排序/顯示 toLocaleString()
+    createdAt,                 // 自訂建立時間（維持不變）
+    updatedAtRaw: nowISO,      // 內部/排序用
+    updatedAt: nowDisp,        // 顯示給使用者看的「最後更新」
     _v: (existing?._v || 0) + 1
   };
 
