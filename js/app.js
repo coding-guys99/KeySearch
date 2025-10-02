@@ -355,7 +355,7 @@ function renderCard(it) {
         <span class="pill">${identityLabel}</span>
         <span class="pill">${typeLabel}</span>
         <span style="margin-left:auto">
-          ${t('meta.created','Created')}: ${escapeHtml(created)} &nbsp; | &nbsp;
+          ${t('','Created')}: ${escapeHtml(created)} &nbsp; | &nbsp;
           ${t('meta.updated','Updated')}: ${escapeHtml(updated)}
         </span>
       </div>
