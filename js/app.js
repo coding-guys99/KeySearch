@@ -56,14 +56,41 @@ const els = {
 let cache = [];
 let currentSort = 'updatedAt_desc';
 
+// 連續序號（從 1 開始；init 時會自動更新成最大值+1）
+let KS_SEQ = 1;
+
+// 建立時間格式：2025-10-02 Time:11:45am
+function formatCreatedAt(d = new Date()) {
+  const pad = n => String(n).padStart(2, '0');
+  const yyyy = d.getFullYear();
+  const mm = pad(d.getMonth() + 1);
+  const dd = pad(d.getDate());
+  let h = d.getHours();
+  const m = pad(d.getMinutes());
+  const ampm = h >= 12 ? 'pm' : 'am';
+  h = h % 12 || 12; // 0=>12
+  return `${yyyy}-${mm}-${dd} Time:${h}:${m}${ampm}`;
+}
+
+
 /* ======================= 初始化（先等 i18nReady） ======================= */
 async function init() {
-  if (window.i18nReady) { try { await window.i18nReady; } catch {} } // ✅ 等字典
+  if (window.i18nReady) { try { await window.i18nReady; } catch {} }
   cache = await dbAll();
+
+  // 🔽 初始化序號：把現有資料的 id（可解析成整數者）找最大 + 1
+  if (cache.length > 0) {
+    const nums = cache
+      .map(x => parseInt(x.id, 10))
+      .filter(n => Number.isFinite(n) && n > 0);
+    if (nums.length > 0) KS_SEQ = Math.max(...nums) + 1;
+  }
+
   bindEvents();
   render();
   maybeShowWelcomeAtStartup();
 }
+
 // 語言切換完成 → 重畫（卡片/文字即時更新）
 window.addEventListener('ks:i18n-changed', () => { if (typeof render === 'function') render(); });
 
@@ -351,33 +378,27 @@ function loadForm(it) {
   els.btnDelete && (els.btnDelete.disabled = false);
 }
 
-/* ======================= 事件：新增/更新/刪除（序號版） ======================= */
-function nextNumericId(list){
-  // 從現有 cache 抓出所有「可解析為整數」的 id，取最大值 + 1
-  const max = (list || []).reduce((m, it) => {
-    const n = parseInt(it?.id, 10);
-    return Number.isFinite(n) ? Math.max(m, n) : m;
-  }, 0);
-  return String(max + 1); // 存成字串以避免 IndexedDB key 型別不一致
-}
-
+/* ======================= 事件：新增/更新/刪除 ======================= */
 async function onSave(e) {
   e?.preventDefault?.();
 
   const title = (els.title?.value || '').trim();
   if (!title) { alert('Title is required.'); return; }
 
-  const now = new Date().toISOString();
+  // 🔢 ID：編輯就沿用；新增就用遞增序號
+  let id = els.id?.value;
+  if (!id) id = String(KS_SEQ++);
 
-  // ★ 這裡改：若表單已有 id（編輯）→ 沿用；否則用序號（最大值 + 1）
-  let id = els.id?.value?.trim();
-  if (!id) {
-    // 確保 cache 是最新，避免並發下序號重複
-    try { if (typeof dbAll === 'function') cache = await dbAll(); } catch {}
-    id = nextNumericId(cache);
-  }
+  // 🕒 時間：建立時間用自訂格式；更新時間仍保留 ISO（方便排序/顯示）
+  const nowISO = new Date().toISOString();
 
-  const prev = cache.find(x => x.id == id); // == 讓 '5' 和 5 視為同一筆
+  // 如果是「新增」，給自訂建立時間；如果是「編輯」，保留原建立時間
+  const existing = cache.find(x => x.id === id);
+  const createdAt =
+    existing?.createdAt
+      ? existing.createdAt
+      : formatCreatedAt(new Date()); // ← 這裡即你要的格式：YYYY-MM-DD Time:hh:mmam
+
   const item = {
     id,
     title,
@@ -386,9 +407,9 @@ async function onSave(e) {
     tags: splitComma(els.tags?.value),
     links: normalizeLinksFromInput(els.links?.value),
     content: els.content?.value || '',
-    createdAt: prev?.createdAt || now,
-    updatedAt: now,
-    _v: (prev?._v || 0) + 1
+    createdAt,          // ⬅️ 使用自訂建立時間
+    updatedAt: nowISO,  // ⬅️ 仍用 ISO，給排序/顯示 toLocaleString()
+    _v: (existing?._v || 0) + 1
   };
 
   let dbOK = false;
@@ -397,24 +418,22 @@ async function onSave(e) {
       await dbAddOrUpdate(item);
       dbOK = true;
     }
-  } catch (err) {
-    console.error('[KS] dbAddOrUpdate failed:', err);
-  }
+  } catch (err) { console.error('[KS] dbAddOrUpdate failed:', err); }
 
   try {
     if (dbOK && typeof dbAll === 'function') {
       cache = await dbAll();
     } else {
-      const idx = cache.findIndex(x => x.id == id);
+      const idx = cache.findIndex(x => x.id === id);
       if (idx >= 0) cache[idx] = item; else cache.push(item);
     }
   } catch (err) {
     console.error('[KS] dbAll failed:', err);
-    const idx = cache.findIndex(x => x.id == id);
+    const idx = cache.findIndex(x => x.id === id);
     if (idx >= 0) cache[idx] = item; else cache.push(item);
   }
 
-  // 清理表單 & 重畫
+  // 清表單 & 重繪
   els.q         && (els.q.value = '');
   els.fIdentity && (els.fIdentity.value = '');
   els.fType     && (els.fType.value = '');
@@ -424,6 +443,7 @@ async function onSave(e) {
   loadForm(null);
   render();
 }
+
 
 
 async function onDelete() {
