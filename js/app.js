@@ -295,7 +295,31 @@ function renderCard(it) {
 
   const tags = (it.tags||[]).map(tag => `<span class="badge">${escapeHtml(tag)}</span>`).join('');
 
-  // ...（你的 links 邏輯保留）...
+  // file:// → web 顯示 Copy Path；桌面顯示 Open File；http/https → <a>
+  const rawLinks = it.links || [];
+  const links = rawLinks.length
+    ? rawLinks.map(u => {
+        if (u.startsWith('file:///')) {
+          if (IS_WEB) {
+            return `
+              <button class="link-btn"
+                      data-act="copy-path"
+                      data-url="${escapeAttr(u)}"
+                      title="${t('card.cannotOpenWeb','Browsers can’t open local files. Click to copy the path.')}">
+                ${t('card.copyPath','Copy Path')}
+              </button>`;
+          } else {
+            return `
+              <button class="link-btn"
+                      data-act="open-file"
+                      data-url="${escapeAttr(u)}">
+                ${t('card.openFile','Open File')}
+              </button>`;
+          }
+        }
+        return `<a href="${escapeAttr(u)}" target="_blank" rel="noopener">${t('card.openLink','Open Link')}</a>`;
+      }).join('')
+    : `<span class="no-link" style="opacity:.7">${t('card.noLink','No link set')}</span>`;
 
   const snippet = (it.content||'').slice(0,220);
 
