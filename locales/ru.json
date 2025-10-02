@@ -115,7 +115,7 @@
 "type.project": "Проект",
 "type.knowledge": "Знания",
 "type.admin": "Админ",
-"type.resource": "Ресурс"
+"type.resource": "Ресурс",
 
 
   "filters.identity": "Идентичность",
@@ -157,6 +157,7 @@
   
   "foot.note": "Local-first • IndexedDB • Сервер не требуется"
 }
+
 
 
 
