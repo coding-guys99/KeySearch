@@ -115,7 +115,7 @@
 "type.project": "Projekt",
 "type.knowledge": "Wissen",
 "type.admin": "Admin",
-"type.resource": "Ressource"
+"type.resource": "Ressource",
 
 
   "filters.identity": "Identität",
@@ -157,6 +157,7 @@
   
   "foot.note": "Local-first • IndexedDB • Kein Server erforderlich"
 }
+
 
 
 
