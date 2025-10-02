@@ -93,19 +93,30 @@
   "about.desc": "Pengelola Pengetahuan Ringan",
   "about.version": "Versi",
 
-  "demo.quickstart.title": "👋 Selamat datang — Mulai Cepat",
-"demo.quickstart.content": "• Tambah / edit kartu di panel kiri\n• Gunakan tag (misalnya: invoice, design) agar pencarian lebih mudah\n• Link mendukung http(s) dan path Windows\n• Ekspor CSV di web → Impor JSON di desktop",
-"demo.project.title": "Contoh Proyek: Pembaruan Website",
-"demo.project.content": "Tujuan: Segarkan halaman hero + harga\nTugas:\n- Audit teks\n- Arah visual baru (Figma)\n- Uji A/B tata letak harga",
-  "btn.edit": "Edit",
+  "demo.quickstart.title": "👋 Selamat Datang — Mulai Cepat",
+"demo.quickstart.content": "• Tambahkan / edit kartu di panel kiri\n• Gunakan tag (misalnya: invoice, design) untuk pencarian lebih mudah...",
+"demo.project.title": "Contoh Proyek: Perombakan Situs Web",
+"demo.project.content": "Tujuan: Segarkan halaman utama pemasaran dan halaman harga\nTugas:\n- Audit salinan saat ini...",
+"btn.edit": "Edit",
 "card.openFile": "Buka File",
 "card.openLink": "Buka Tautan",
+"card.copyPath": "Salin Path",
+"card.copied": "Tersalin!",
+"card.copyFailed": "Gagal menyalin. Silakan coba lagi.",
+"card.cannotOpenWeb": "Browser tidak dapat membuka file lokal. Klik untuk menyalin path.",
+"card.noLink": "Belum ada tautan yang diatur",
+"card.openFailed": "Gagal dibuka.",
+"card.desktopOnly": "Tindakan ini hanya tersedia di aplikasi desktop.",
+"hint.exampleCard": "Ini adalah kartu contoh",
+"meta.updated": "Diperbarui",
+"stats.examples": "{n} contoh",
 "identity.company": "Perusahaan",
 "identity.personal": "Pribadi",
 "type.project": "Proyek",
 "type.knowledge": "Pengetahuan",
 "type.admin": "Admin",
-"type.resource": "Sumber daya",
+"type.resource": "Sumber daya"
+
 
 
   "filters.identity": "Identitas",
@@ -147,6 +158,7 @@
   
   "foot.note": "Local-first • IndexedDB • Tidak perlu server"
 }
+
 
 
 
