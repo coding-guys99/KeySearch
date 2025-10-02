@@ -94,18 +94,29 @@
   "about.version": "Version",
 
   "demo.quickstart.title": "👋 Willkommen — Schnellstart",
-"demo.quickstart.content": "• Karten im linken Bereich hinzufügen/bearbeiten\n• Tags verwenden (z. B. invoice, design) für einfachere Suche\n• Links unterstützen http(s) und Windows-Pfade\n• CSV im Web exportieren → JSON auf Desktop importieren",
+"demo.quickstart.content": "• Karten im linken Panel hinzufügen / bearbeiten\n• Verwenden Sie Tags (z. B.: invoice, design), um die Suche zu erleichtern...",
 "demo.project.title": "Projektbeispiel: Website-Überarbeitung",
-"demo.project.content": "Ziel: Hero- und Preisseite aktualisieren\nAufgaben:\n- Text prüfen\n- Neue visuelle Richtungen (Figma)\n- A/B-Test von Preis-Layouts",
-  "btn.edit": "Bearbeiten",
+"demo.project.content": "Ziel: Marketing-Website Hero + Preisseite aktualisieren\nAufgaben:\n- Aktuellen Text prüfen...",
+"btn.edit": "Bearbeiten",
 "card.openFile": "Datei öffnen",
 "card.openLink": "Link öffnen",
-"identity.company": "Firma",
+"card.copyPath": "Pfad kopieren",
+"card.copied": "Kopiert!",
+"card.copyFailed": "Kopieren fehlgeschlagen. Bitte erneut versuchen.",
+"card.cannotOpenWeb": "Browser können lokale Dateien nicht öffnen. Klicken Sie, um den Pfad zu kopieren.",
+"card.noLink": "Kein Link gesetzt",
+"card.openFailed": "Öffnen fehlgeschlagen.",
+"card.desktopOnly": "Diese Aktion ist nur in der Desktop-App verfügbar.",
+"hint.exampleCard": "Dies ist eine Beispielkarte",
+"meta.updated": "Aktualisiert",
+"stats.examples": "{n} Beispiele",
+"identity.company": "Unternehmen",
 "identity.personal": "Persönlich",
 "type.project": "Projekt",
 "type.knowledge": "Wissen",
-"type.admin": "Verwaltung",
-"type.resource": "Ressource",
+"type.admin": "Admin",
+"type.resource": "Ressource"
+
 
   "filters.identity": "Identität",
   "filters.all": "Alle",
@@ -146,6 +157,7 @@
   
   "foot.note": "Local-first • IndexedDB • Kein Server erforderlich"
 }
+
 
 
 
