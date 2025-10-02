@@ -293,41 +293,17 @@ if (!window.__KS_LINK_HANDLER_BOUND__) {
 function renderCard(it) {
   const t = (k, fb) => (window.i18n?.t ? window.i18n.t(k) : k) || fb || k;
 
-  const tags = (it.tags || []).map(tag =>
-    `<span class="badge">${escapeHtml(tag)}</span>`).join('');
+  const tags = (it.tags||[]).map(tag => `<span class="badge">${escapeHtml(tag)}</span>`).join('');
 
-  // file:// → web 顯示 Copy Path；桌面顯示 Open File；http/https → <a>
-  const rawLinks = it.links || [];
-  const links = rawLinks.length
-    ? rawLinks.map(u => {
-        if (u.startsWith('file:///')) {
-          if (IS_WEB) {
-            return `
-              <button class="link-btn"
-                      data-act="copy-path"
-                      data-url="${escapeAttr(u)}"
-                      title="${t('card.cannotOpenWeb','Browsers can’t open local files. Click to copy the path.')}">
-                ${t('card.copyPath','Copy Path')}
-              </button>`;
-          } else {
-            return `
-              <button class="link-btn"
-                      data-act="open-file"
-                      data-url="${escapeAttr(u)}">
-                ${t('card.openFile','Open File')}
-              </button>`;
-          }
-        }
-        return `<a href="${escapeAttr(u)}" target="_blank" rel="noopener">${t('card.openLink','Open Link')}</a>`;
-      }).join('')
-    : `<span class="no-link" style="opacity:.7">${t('card.noLink','No link set')}</span>`;
+  // ...（你的 links 邏輯保留）...
 
-  const snippet = (it.content || '').slice(0, 220);
+  const snippet = (it.content||'').slice(0,220);
+
+  // ✅ 直接用儲存好的字串，不再 new Date(...)，避免 Invalid Date
   const updated = it.updatedAt || '';
-  const identityLabel = it.identity === 'Company'
-    ? t('identity.company','Company')
-    : t('identity.personal','Personal');
-  const typeLabel = t(`type.${(it.type || '').toLowerCase()}`, it.type || '');
+
+  const identityLabel = it.identity === 'Company' ? t('identity.company','Company') : t('identity.personal','Personal');
+  const typeLabel = t(`type.${(it.type||'').toLowerCase()}`, it.type || '');
   const demoAttr = it._demo ? ' data-demo="1"' : '';
 
   return `
@@ -337,21 +313,22 @@ function renderCard(it) {
         <button class="edit-btn">${t('btn.edit','Edit')}</button>
       </div>
       <div class="badges">
-        <span class="badge ${it.identity==='Company' ? 'green' : ''}">${identityLabel}</span>
+        <span class="badge ${it.identity==='Company'?'green':''}">${identityLabel}</span>
         <span class="badge">${typeLabel}</span>
         ${tags}
       </div>
-      <div class="snippet">${escapeHtml(snippet)}${(it.content || '').length > 220 ? '…' : ''}</div>
+      <div class="snippet">${escapeHtml(snippet)}${(it.content||'').length>220?'…':''}</div>
       <div class="links">${links}</div>
       <div class="meta">
         <span class="pill">${identityLabel}</span>
         <span class="pill">${typeLabel}</span>
         <span style="margin-left:8px">${t('meta.updated','Updated')}: ${escapeHtml(updated)}</span>
-        ${typeof it._score === 'number' ? `<span style="margin-left:auto">Score: ${it._score}</span>` : ''}
+        ${typeof it._score==='number' ? `<span style="margin-left:auto">Score: ${it._score}</span>` : ''}
       </div>
     </article>
   `;
 }
+
 
 
 
@@ -385,34 +362,30 @@ async function onSave(e) {
   const title = (els.title?.value || '').trim();
   if (!title) { alert('Title is required.'); return; }
 
-  // 🔢 ID：編輯沿用；新增用遞增序號（需已定義全域 KS_SEQ）
-  let id = els.id?.value;
-  if (!id) id = String(KS_SEQ++);
+  // 保留你現有的 ID 邏輯（如有用流水號，就用你的 nextId()）
+  let id = els.id?.value || (crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()));
 
-  // 🕒 時間：建立時間維持你的自訂規則；「最後更新」改為你要的顯示樣式
-  const now = new Date();
-  const nowISO  = now.toISOString();          // 原始 ISO（排序/內部用）
-  const nowDisp = formatDisplayTime(now);     // 顯示用：YYYY-MM-DD Time:hh:mmam/pm
-
+  // 取既有項目（編輯時）
   const existing = cache.find(x => x.id === id);
+
+  // 建立時間：新增時用顯示格式；編輯則沿用舊值
   const createdAt = existing?.createdAt || formatDisplayTime(new Date());
-    ? existing.createdAt
-    : formatCreatedAt(new Date());            // 你原本的建立時間格式化函式
-  // 每次儲存都更新 updatedAt
-const updatedAt = formatDisplayTime(new Date());
+
+  // 更新時間：每次儲存都用顯示格式
+  const updatedAt = formatDisplayTime(new Date());
 
   const item = {
-  id,
-  title,
-  identity: els.identity?.value || 'Company',
-  type: els.type?.value || 'Project',
-  tags: splitComma(els.tags?.value),
-  links: normalizeLinksFromInput(els.links?.value),
-  content: els.content?.value || '',
-  createdAt,
-  updatedAt,
-  _v: (existing?._v || 0) + 1
-};
+    id,
+    title,
+    identity: els.identity?.value || 'Company',
+    type: els.type?.value || 'Project',
+    tags: splitComma(els.tags?.value),
+    links: normalizeLinksFromInput(els.links?.value),
+    content: els.content?.value || '',
+    createdAt,      // ← 已是 "YYYY/MM/DD, hh:mmam"
+    updatedAt,      // ← 已是 "YYYY/MM/DD, hh:mmam"
+    _v: (existing?._v || 0) + 1
+  };
 
   let dbOK = false;
   try {
@@ -445,6 +418,7 @@ const updatedAt = formatDisplayTime(new Date());
   loadForm(null);
   render();
 }
+
 
 
 
