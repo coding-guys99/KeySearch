@@ -103,11 +103,7 @@
 </head>
 <body>
 <header id="ks-topbar" class="ks-topbar ks-theme-dark">
-	<!-- 在這裡加 logo -->
-  <div class="brand">
-    <img src="assets/brand/logo-icon-gold.svg" alt="KeySearch Logo" class="logo"/>
-    <span class="brand-text">KeySearch</span>
-  </div>
+	
   <!-- Left -->
   <div class="ks-left">
     <div class="ks-brand">
@@ -333,7 +329,16 @@
 </div>
 
 <!-- 只有網頁版會顯示（因為 .is-web 控制） -->
+
+<div class="topbar is-web">
+  <!-- 左邊：Logo + 品牌 -->
+  <div class="brand">
+    <img src="assets/logo.svg" alt="KeySearch Logo" class="logo"/>
+    <span class="brand-text">KeySearch</span>
+  </div>
+	
 <div class="web-actions">
+	
   <button class="btn" id="btn-export-csv" data-i18n="menu.file.export">Export CSV</button>
 
   <label class="lang" for="lang-select" style="display:inline-flex;gap:6px;align-items:center">
@@ -359,9 +364,7 @@
     </select>
   </label>
 </div>
-
-
-
+</div>
 
 <section class="filters">
   <div class="filter-row">
@@ -657,6 +660,7 @@ setTimeout(() => {
 </body>
 
 </html>
+
 
 
 
