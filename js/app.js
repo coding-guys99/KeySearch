@@ -168,26 +168,35 @@ function getDemoCards(){
   ];
 }
 
+/* ---------- 小工具 ---------- */
+function isWeb() {
+  return document.documentElement.classList.contains('is-web') ||
+         !(/\bElectron\/\d/.test(navigator.userAgent));
+}
+const IS_WEB = isWeb();
+
+/* ---------- 渲染主流程 ---------- */
 function render() {
   const { q, identity, type, tag, sort } = readFilters();
   let items = filterAndSearch(cache, { q, identity, type, tag });
   items = sortItems(items, sort || 'updatedAt_desc');
   currentSort = sort || 'updatedAt_desc';
 
-  // 只有在「資料庫為空」時顯示示例卡
+  // DB 為空時顯示示例卡（i18n）
   const useDemo = (cache.length === 0);
   if (useDemo) items = getDemoCards();
 
   if (els.stats) {
-    const t = (k, fb) => (window.i18n?.t ? window.i18n.t(k) : k) || fb || k;
-    const label = useDemo
-      ? t('stats.examples', `${items.length} examples`)
-      : `${items.length} result${items.length===1?'':'s'}`;
-    els.stats.textContent = label;
+    const tt = (k, fb) => (window.i18n?.t ? window.i18n.t(k) : k) || fb || k;
+    els.stats.textContent = useDemo
+      ? tt('stats.examples', `${items.length} examples`)
+      : `${items.length} result${items.length === 1 ? '' : 's'}`;
   }
 
   if (els.cards) {
     els.cards.innerHTML = items.map(renderCard).join('');
+
+    // Edit 綁定（示例卡不可編輯）
     $$('.card').forEach(card => {
       const isDemo = card.hasAttribute('data-demo');
       const btn = card.querySelector('.edit-btn');
@@ -208,21 +217,25 @@ function render() {
   }
 }
 
-// 只需綁一次，建議放在 bindEvents() 末尾；若放 render() 記得先移除再綁
+/* ---------- 卡片連結行為（只綁一次） ---------- */
 if (!window.__KS_LINK_HANDLER_BOUND__) {
   window.__KS_LINK_HANDLER_BOUND__ = true;
+
   els.cards?.addEventListener('click', async (e) => {
     const btn = e.target.closest('.link-btn');
     if (!btn) return;
+
+    // 在監聽器內就地提供 i18n 取字
+    const t = (k, fb) => (window.i18n?.t ? window.i18n.t(k) : k) || fb || k;
 
     const act = btn.dataset.act;
     const url = btn.dataset.url || '';
 
     if (act === 'copy-path') {
-      // 複製 file 路徑（保留原樣或去掉 file:// 皆可）
+      // 讓複製內容更好看（移除 file:///、還原空白）
+      const pretty = url.replace(/^file:\/+/, '').replace(/%20/g, ' ');
       try {
-        await navigator.clipboard.writeText(url);
-        // 小回饋
+        await navigator.clipboard.writeText(pretty);
         const old = btn.textContent;
         btn.textContent = t('card.copied','Copied!');
         btn.disabled = true;
@@ -233,61 +246,61 @@ if (!window.__KS_LINK_HANDLER_BOUND__) {
       } catch (err) {
         alert(t('card.copyFailed','Copy failed. Please try again.'));
       }
+      return;
     }
 
     if (act === 'open-file') {
-      // 只在桌面版有用
+      // 只在桌面版有效
       if (window.electronAPI?.openPath) {
         try { await window.electronAPI.openPath(url); }
         catch (err) { alert(t('card.openFailed','Open failed.')); }
       } else {
         alert(t('card.desktopOnly','This action is available in the desktop app.'));
       }
+      return;
     }
-  });
+  }, { passive: true });
 }
 
-
-function isWeb() {
-  return document.documentElement.classList.contains('is-web');
-}
-
+/* ---------- 卡片模板 ---------- */
 function renderCard(it) {
   const t = (k, fb) => (window.i18n?.t ? window.i18n.t(k) : k) || fb || k;
 
-  const tags = (it.tags||[]).map(tag => `<span class="badge">${escapeHtml(tag)}</span>`).join('');
+  const tags = (it.tags || []).map(tag =>
+    `<span class="badge">${escapeHtml(tag)}</span>`).join('');
 
-  // ⬇️ 這段改過：web + file:// 顯示按鈕；其他維持 <a>
-  const links = (it.links || []).map(u => {
-  if (u.startsWith('file:///')) {
-    if (IS_WEB) {
-      // Web：不能直接開啟，改成 Copy Path
-      return `
-        <button class="link-btn"
-                data-act="copy-path"
-                data-url="${escapeAttr(u)}"
-                title="${t('card.cannotOpenWeb','Browsers can’t open local files. Click to copy the path.')}">
-          ${t('card.copyPath','Copy Path')}
-        </button>`;
-    } else {
-      // 桌面版（Electron）：真的開啟本機檔
-      return `
-        <button class="link-btn"
-                data-act="open-file"
-                data-url="${escapeAttr(u)}">
-          ${t('card.openFile','Open File')}
-        </button>`;
-    }
-  }
-  // http/https：照舊是超連結
-  return `<a href="${escapeAttr(u)}" target="_blank" rel="noopener">${t('card.openLink','Open Link')}</a>`;
-}).join('');
+  // file:// → web 顯示 Copy Path；桌面顯示 Open File；http/https → <a>
+  const rawLinks = it.links || [];
+  const links = rawLinks.length
+    ? rawLinks.map(u => {
+        if (u.startsWith('file:///')) {
+          if (IS_WEB) {
+            return `
+              <button class="link-btn"
+                      data-act="copy-path"
+                      data-url="${escapeAttr(u)}"
+                      title="${t('card.cannotOpenWeb','Browsers can’t open local files. Click to copy the path.')}">
+                ${t('card.copyPath','Copy Path')}
+              </button>`;
+          } else {
+            return `
+              <button class="link-btn"
+                      data-act="open-file"
+                      data-url="${escapeAttr(u)}">
+                ${t('card.openFile','Open File')}
+              </button>`;
+          }
+        }
+        return `<a href="${escapeAttr(u)}" target="_blank" rel="noopener">${t('card.openLink','Open Link')}</a>`;
+      }).join('')
+    : `<span class="no-link" style="opacity:.7">${t('card.noLink','No link set')}</span>`;
 
-
-  const snippet = (it.content||'').slice(0,220);
+  const snippet = (it.content || '').slice(0, 220);
   const updated = it.updatedAt ? new Date(it.updatedAt).toLocaleString() : '';
-  const identityLabel = it.identity === 'Company' ? t('identity.company','Company') : t('identity.personal','Personal');
-  const typeLabel = t(`type.${(it.type||'').toLowerCase()}`, it.type || '');
+  const identityLabel = it.identity === 'Company'
+    ? t('identity.company','Company')
+    : t('identity.personal','Personal');
+  const typeLabel = t(`type.${(it.type || '').toLowerCase()}`, it.type || '');
   const demoAttr = it._demo ? ' data-demo="1"' : '';
 
   return `
@@ -297,21 +310,22 @@ function renderCard(it) {
         <button class="edit-btn">${t('btn.edit','Edit')}</button>
       </div>
       <div class="badges">
-        <span class="badge ${it.identity==='Company'?'green':''}">${identityLabel}</span>
+        <span class="badge ${it.identity==='Company' ? 'green' : ''}">${identityLabel}</span>
         <span class="badge">${typeLabel}</span>
         ${tags}
       </div>
-      <div class="snippet">${escapeHtml(snippet)}${(it.content||'').length>220?'…':''}</div>
+      <div class="snippet">${escapeHtml(snippet)}${(it.content || '').length > 220 ? '…' : ''}</div>
       <div class="links">${links}</div>
       <div class="meta">
         <span class="pill">${identityLabel}</span>
         <span class="pill">${typeLabel}</span>
         <span style="margin-left:8px">${t('meta.updated','Updated')}: ${escapeHtml(updated)}</span>
-        ${typeof it._score==='number' ? `<span style="margin-left:auto">Score: ${it._score}</span>` : ''}
+        ${typeof it._score === 'number' ? `<span style="margin-left:auto">Score: ${it._score}</span>` : ''}
       </div>
     </article>
   `;
 }
+
 
 
 /* ======================= 表單 ======================= */
