@@ -351,7 +351,16 @@ function loadForm(it) {
   els.btnDelete && (els.btnDelete.disabled = false);
 }
 
-/* ======================= 事件：新增/更新/刪除 ======================= */
+/* ======================= 事件：新增/更新/刪除（序號版） ======================= */
+function nextNumericId(list){
+  // 從現有 cache 抓出所有「可解析為整數」的 id，取最大值 + 1
+  const max = (list || []).reduce((m, it) => {
+    const n = parseInt(it?.id, 10);
+    return Number.isFinite(n) ? Math.max(m, n) : m;
+  }, 0);
+  return String(max + 1); // 存成字串以避免 IndexedDB key 型別不一致
+}
+
 async function onSave(e) {
   e?.preventDefault?.();
 
@@ -359,8 +368,16 @@ async function onSave(e) {
   if (!title) { alert('Title is required.'); return; }
 
   const now = new Date().toISOString();
-  const id  = els.id?.value || (crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()));
 
+  // ★ 這裡改：若表單已有 id（編輯）→ 沿用；否則用序號（最大值 + 1）
+  let id = els.id?.value?.trim();
+  if (!id) {
+    // 確保 cache 是最新，避免並發下序號重複
+    try { if (typeof dbAll === 'function') cache = await dbAll(); } catch {}
+    id = nextNumericId(cache);
+  }
+
+  const prev = cache.find(x => x.id == id); // == 讓 '5' 和 5 視為同一筆
   const item = {
     id,
     title,
@@ -369,9 +386,9 @@ async function onSave(e) {
     tags: splitComma(els.tags?.value),
     links: normalizeLinksFromInput(els.links?.value),
     content: els.content?.value || '',
-    createdAt: els.id?.value ? (cache.find(x => x.id === id)?.createdAt || now) : now,
+    createdAt: prev?.createdAt || now,
     updatedAt: now,
-    _v: (cache.find(x => x.id === id)?._v || 0) + 1
+    _v: (prev?._v || 0) + 1
   };
 
   let dbOK = false;
@@ -380,22 +397,24 @@ async function onSave(e) {
       await dbAddOrUpdate(item);
       dbOK = true;
     }
-  } catch (err) { console.error('[KS] dbAddOrUpdate failed:', err); }
+  } catch (err) {
+    console.error('[KS] dbAddOrUpdate failed:', err);
+  }
 
   try {
     if (dbOK && typeof dbAll === 'function') {
       cache = await dbAll();
     } else {
-      const idx = cache.findIndex(x => x.id === id);
+      const idx = cache.findIndex(x => x.id == id);
       if (idx >= 0) cache[idx] = item; else cache.push(item);
     }
   } catch (err) {
     console.error('[KS] dbAll failed:', err);
-    const idx = cache.findIndex(x => x.id === id);
+    const idx = cache.findIndex(x => x.id == id);
     if (idx >= 0) cache[idx] = item; else cache.push(item);
   }
 
-  // 可選：避免新卡片被當前篩選藏起來
+  // 清理表單 & 重畫
   els.q         && (els.q.value = '');
   els.fIdentity && (els.fIdentity.value = '');
   els.fType     && (els.fType.value = '');
@@ -405,6 +424,7 @@ async function onSave(e) {
   loadForm(null);
   render();
 }
+
 
 async function onDelete() {
   const id = els.id?.value;
